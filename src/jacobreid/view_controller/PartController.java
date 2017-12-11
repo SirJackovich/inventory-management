@@ -1,5 +1,7 @@
 package jacobreid.view_controller;
 
+import jacobreid.model.Inhouse;
+import jacobreid.model.Outsourced;
 import jacobreid.model.Part;
 import java.io.IOException;
 import javafx.collections.FXCollections;
@@ -63,6 +65,8 @@ public class PartController {
     @FXML
     public void initialize() {
         inHouseRadioButton.setSelected(true);
+        inHouseRadioButton.setToggleGroup(group);
+        OutsourcedRadioButton.setToggleGroup(group);
         partTextLabel.setText("Company Name");
         IDTextField.setDisable(true);
     }
@@ -74,7 +78,8 @@ public class PartController {
 
     @FXML
     void handleCancel(ActionEvent event) {
-
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -89,24 +94,24 @@ public class PartController {
 
     @FXML
     void handleSave(ActionEvent event) throws IOException {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
-//        MainController mainController = loader.getController();
-//        parts = mainController.getParts();
-        String partType = group.getSelectedToggle().getUserData().toString();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
+        MainController mainController = loader.getController();
+        parts = mainController.getParts();
+        RadioButton selected = (RadioButton)group.getSelectedToggle();
+        String partType = selected.getText();
         String name = nameTextField.getText();
         String inventory = inventoryTextField.getText();
         String price = priceTextField.getText();
         String max = maxTextField.getText();
         String min = minTextField.getText();
         String partText = partTextField.getText();
-        System.out.println("partType: " + partType);
-//        if("Outsourced".equals(partType)){
-//            parts.add(new Outsourced(name, Double.parseDouble(price), Integer.parseInt(inventory), Integer.parseInt(min), Integer.parseInt(max), partText));
-//        }else{
-//           parts.add(new Inhouse(name, Double.parseDouble(price), Integer.parseInt(inventory), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partText)));
-//        }
-//        // TODO: need to bind the part to the table cells??
-//        mainController.setParts(parts);
+        if("Outsourced".equals(partType)){
+            parts.add(new Outsourced(name, Double.parseDouble(price), Integer.parseInt(inventory), Integer.parseInt(min), Integer.parseInt(max), partText));
+        }else{
+           parts.add(new Inhouse(name, Double.parseDouble(price), Integer.parseInt(inventory), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partText)));
+        }
+        // TODO: need to bind the part to the table cells??
+        mainController.setParts(parts);
         Stage stage = (Stage) saveButton.getScene().getWindow();
         stage.close();
     }

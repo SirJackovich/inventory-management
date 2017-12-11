@@ -86,6 +86,7 @@ public class MainController {
     
     @FXML
     public ObservableList<Part> getParts() {
+        System.out.println("I made it here!");
         return partsTableView.getItems();
     }
     

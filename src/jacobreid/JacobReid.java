@@ -11,15 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import jacobreid.model.Inhouse;
-import jacobreid.model.Inventory;
-import jacobreid.model.Outsourced;
-import jacobreid.model.Part;
-import jacobreid.model.Product;
-import jacobreid.view_controller.MainController;
-import jacobreid.view_controller.PartController;
-import jacobreid.view_controller.ProductController;
-
 /**
  *
  * @author sirjackovich
