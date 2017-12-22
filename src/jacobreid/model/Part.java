@@ -21,7 +21,7 @@ public abstract class Part {
     private final IntegerProperty partID;
     private StringProperty name;
     private DoubleProperty price;
-    private IntegerProperty inStock;
+    private IntegerProperty inventory;
     private IntegerProperty min;
     private IntegerProperty max;
     
@@ -32,7 +32,7 @@ public abstract class Part {
         this.partID = null;
         this.name = null;
         this.price = null;
-        this.inStock = null;
+        this.inventory = null;
         this.min = null;
         this.max = null;
     }
@@ -42,15 +42,15 @@ public abstract class Part {
      * 
      * @param name
      * @param price
-     * @param inStock
+     * @param inventory
      * @param min
      * @param max
      */
-    public Part(String name, double price, int inStock, int min, int max) {
+    public Part(String name, double price, int inventory, int min, int max) {
         this.partID = new SimpleIntegerProperty(generateID());
         this.name = new SimpleStringProperty(name);
         this.price = new SimpleDoubleProperty(price);
-        this.inStock = new SimpleIntegerProperty(inStock);
+        this.inventory = new SimpleIntegerProperty(inventory);
         this.min = new SimpleIntegerProperty(min);
         this.max = new SimpleIntegerProperty(max);
     }
@@ -60,48 +60,72 @@ public abstract class Part {
 //        partID = id;
 //   }
     
-    public IntegerProperty getPartID(){
-        return this.partID;
+    public int getPartID(){
+        return this.partID.get();
+    }
+    
+    public IntegerProperty IDProperty() {
+        return partID;
     }
     
     public void setName(String name){
-        this.name = new SimpleStringProperty(name);
+        this.name.set(name);
     }
     
-    public StringProperty getName(){
-        return this.name;
+    public String getName(){
+        return this.name.get();
+    }
+    
+    public StringProperty nameProperty() {
+        return name;
     }
     
     public void setPrice(double price){
-        this.price = new SimpleDoubleProperty(price);
+        this.price.set(price);
     }
     
-    public DoubleProperty getPrice(){
-        return this.price;
+    public double getPrice(){
+        return this.price.get();
     }
     
-    public void setInStock(int inStock){
-        this.inStock = new SimpleIntegerProperty(inStock);
+    public DoubleProperty priceProperty() {
+        return price;
     }
     
-    public IntegerProperty getInStock(){
-        return this.inStock;
+    public void setInventory(int inventory){
+        this.inventory.set(inventory);
+    }
+    
+    public int getInventory(){
+        return this.inventory.get();
+    }
+    
+    public IntegerProperty inventoryProperty() {
+        return inventory;
     }
     
     public void setMin(int min){
-        this.min = new SimpleIntegerProperty(min);
+        this.min.set(min);
     }
     
-    public IntegerProperty getMin(){
-        return this.min;
+    public int getMin(){
+        return this.min.get();
+    }
+    
+    public IntegerProperty minProperty() {
+        return min;
     }
     
     public void setMax(int max){
-        this.max = new SimpleIntegerProperty(max);
+        this.max.set(max);
     }
     
-    public IntegerProperty getMax(){
-        return this.max;
+    public int getMax(){
+        return this.max.get();
+    }
+    
+    public IntegerProperty maxProperty() {
+        return max;
     }
     
     private int generateID(){

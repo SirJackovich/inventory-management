@@ -1,5 +1,6 @@
 package jacobreid.view_controller;
 
+import jacobreid.JacobReid;
 import jacobreid.model.Part;
 import java.io.IOException;
 import javafx.collections.ObservableList;
@@ -34,16 +35,16 @@ public class MainController {
     private TableView<Part> partsTableView;
 
     @FXML
-    private TableColumn<?, ?> partIDColumn;
+    private TableColumn<Part, Integer> partIDColumn;
 
     @FXML
-    private TableColumn<?, ?> partNameColumn;
+    private TableColumn<Part, String> partNameColumn;
 
     @FXML
-    private TableColumn<?, ?> partInventoryColumn;
+    private TableColumn<Part, Integer> partInventoryColumn;
 
     @FXML
-    private TableColumn<?, ?> partPriceColumn;
+    private TableColumn<Part, Double> partPriceColumn;
 
     @FXML
     private Button addPartButton;
@@ -84,14 +85,34 @@ public class MainController {
     @FXML
     private Button deleteProductButton;
     
-    @FXML
-    public ObservableList<Part> getParts() {
-        return partsTableView.getItems();
-    }
+    // Reference to the main application.
+    private JacobReid main;
+    
+//    @FXML
+//    public ObservableList<Part> getParts() {
+//        return partsTableView.getItems();
+//    }
+//    
+//    @FXML
+//    public void setParts(ObservableList<Part> parts) {
+//        partsTableView.setItems(parts);
+//    }
     
     @FXML
-    public void setParts(ObservableList<Part> parts) {
-        partsTableView.setItems(parts);
+    private void initialize() {
+        // Initialize the tables
+        partIDColumn.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
+        partNameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        partInventoryColumn.setCellValueFactory(cellData -> cellData.getValue().inventoryProperty().asObject());
+        partPriceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
+    }
+
+    public void setMain(JacobReid main) {
+        System.out.println("setMain function");
+        this.main = main;
+
+        // Add observable list data to the table
+        partsTableView.setItems(main.getParts());
     }
 
     @FXML
