@@ -63,8 +63,8 @@ public class PartController {
     private Button cancelButton;
     
     private Stage partStage;
-    private Part part;
-    private boolean saveClicked = false;
+    private Inhouse inhousePart;
+    private Outsourced outsourcedPart;
     
     @FXML
     public void initialize() {
@@ -79,21 +79,35 @@ public class PartController {
         this.partStage = partStage;
     }
     
-    public void setPart(Part part) {
-        this.part = part;
-        if (part != null) {
-            nameTextField.setText(part.getName());
-            inventoryTextField.setText(Integer.toString(part.getInventory()));
-            priceTextField.setText(Double.toString(part.getPrice()));
-            // partTextField.setText(part.getCompanyName());
-            maxTextField.setText(Integer.toString(part.getMax()));
-            minTextField.setText(Integer.toString(part.getMin()));
-            IDTextField.setText(Integer.toString(part.getID()));
+//    public void setInhousePart(Inhouse inhousePart) {
+//        nameTextField.setText(inhousePart.getName());
+//        inventoryTextField.setText(Integer.toString(inhousePart.getInventory()));
+//        priceTextField.setText(Double.toString(inhousePart.getPrice()));
+//        maxTextField.setText(Integer.toString(inhousePart.getMax()));
+//        minTextField.setText(Integer.toString(inhousePart.getMin()));
+//        IDTextField.setText(Integer.toString(inhousePart.getID()));
+//        partTextField.setText(Integer.toString(inhousePart.getMachineID()));
+//    }
+    
+    public Part getPart(){
+        if("Outsourced".equals(getPartType())){
+            return getOutsourcedPart();
+        }else {
+            return getInhousePart();
         }
     }
     
-    public boolean isSaveClicked() {
-        return saveClicked;
+    public Inhouse getInhousePart(){
+        return this.inhousePart;
+    }
+    
+    public Outsourced getOutsourcedPart(){
+        return this.outsourcedPart;
+    }
+    
+    public String getPartType() {
+        RadioButton selected = (RadioButton)group.getSelectedToggle();
+        return selected.getText();
     }
     
     @FXML
@@ -117,7 +131,7 @@ public class PartController {
     }
 
     @FXML
-    void handleSave(ActionEvent event) throws IOException {
+    void handleSave(ActionEvent event){
 //        FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
 //        loader.load();
 //        MainController mainController = loader.getController();
@@ -142,22 +156,21 @@ public class PartController {
 //        
 
         if (isInputValid()) {
-            if (part == null) {
-                if("Outsourced".equals(partTextField.getText())){
-                    this.part = new Outsourced(nameTextField.getText(), Double.parseDouble(priceTextField.getText()), Integer.parseInt(inventoryTextField.getText()), Integer.parseInt(minTextField.getText()), Integer.parseInt(maxTextField.getText()), partTextField.getText());
-                }else {
-                    this.part = new Inhouse(nameTextField.getText(), Double.parseDouble(priceTextField.getText()), Integer.parseInt(inventoryTextField.getText()), Integer.parseInt(minTextField.getText()), Integer.parseInt(maxTextField.getText()), Integer.parseInt(partTextField.getText()));
-                }
-            }else {
-                part.setName(nameTextField.getText());
-                part.setInventory(Integer.parseInt(inventoryTextField.getText()));
-                part.setPrice(Double.parseDouble(priceTextField.getText()));
-                // part.setCompanyName(partTextField.getText())
-                part.setMax(Integer.parseInt(maxTextField.getText()));
-                part.setMin(Integer.parseInt(minTextField.getText()));
-            }
             
-            saveClicked = true;
+            
+                if("Outsourced".equals(getPartType())){
+                    this.outsourcedPart = new Outsourced(nameTextField.getText(), Double.parseDouble(priceTextField.getText()), Integer.parseInt(inventoryTextField.getText()), Integer.parseInt(minTextField.getText()), Integer.parseInt(maxTextField.getText()), partTextField.getText());
+                }else {
+                    this.inhousePart = new Inhouse(nameTextField.getText(), Double.parseDouble(priceTextField.getText()), Integer.parseInt(inventoryTextField.getText()), Integer.parseInt(minTextField.getText()), Integer.parseInt(maxTextField.getText()), Integer.parseInt(partTextField.getText()));
+                }
+            
+//                part.setName(nameTextField.getText());
+//                part.setInventory(Integer.parseInt(inventoryTextField.getText()));
+//                part.setPrice(Double.parseDouble(priceTextField.getText()));
+//                // part.setCompanyName(partTextField.getText())
+//                part.setMax(Integer.parseInt(maxTextField.getText()));
+//                part.setMin(Integer.parseInt(minTextField.getText()));            
+           
             partStage.close();
         }
     }

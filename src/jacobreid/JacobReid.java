@@ -71,15 +71,7 @@ public class JacobReid extends Application {
         }
     }
     
-    /**
-    * Opens a dialog to edit details for the selected part. If the user
-    * clicks save, the changes are saved into the provided part object and true
-    * is returned.
-    * 
-    * @param part the part object to be edited
-    * @return true if the user clicked save, false otherwise.
-    */
-   public boolean showPartDialog(Part part) {
+   public Part showPartDialog() {
        try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -98,14 +90,14 @@ public class JacobReid extends Application {
             PartController partController = loader.getController();
             // partController.setPartLabel("Modify Part");
             partController.setPartStage(partStage);
-            partController.setPart(part);
+            // partController.setInhousePart(inhousePart);
 
             partStage.showAndWait();
 
-            return partController.isSaveClicked();
+            return partController.getPart();
        } catch (IOException e) {
            e.printStackTrace();
-           return false;
+           return null;
        }
    }
     

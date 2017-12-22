@@ -24,7 +24,12 @@ public final class Inhouse extends Part{
        this.machineID = new SimpleIntegerProperty(machineID);
     }
 
-    public IntegerProperty getMachineId() {
-        return this.machineID;
+    public int getMachineID() {
+        return this.machineID.get();
     }
+    
+//    @Override
+//    public String getPartType(){
+//        return "Inhouse";
+//    }
 }

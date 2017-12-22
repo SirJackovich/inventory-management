@@ -4,6 +4,7 @@ import jacobreid.JacobReid;
 import jacobreid.model.Inhouse;
 import jacobreid.model.Part;
 import java.io.IOException;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -116,11 +117,7 @@ public class MainController {
 
     @FXML
     void handleAddPart(ActionEvent event) {
-        Inhouse tempPart = null;
-        boolean saveClicked = main.showPartDialog(tempPart);
-        if (saveClicked) {
-            main.getParts().add(tempPart);
-        }
+        main.getParts().add(main.showPartDialog());
     }
 
     @FXML
@@ -148,7 +145,7 @@ public class MainController {
     void handleModifyPart(ActionEvent event) {
         Part part = partsTableView.getSelectionModel().getSelectedItem();
         if (part != null) {
-            main.showPartDialog(part);
+            // main.showPartDialog(part);
         } else {
             Alert alert = new Alert(AlertType.WARNING);
             alert.initOwner(main.getPrimaryStage());

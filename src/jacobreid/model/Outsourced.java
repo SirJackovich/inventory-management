@@ -27,4 +27,9 @@ public final class Outsourced extends Part{
     public StringProperty getCompanyName() {
         return this.companyName;
     }
+    
+//    @Override
+//    public String getPartType(){
+//        return "Outsourced";
+//    }
 }
