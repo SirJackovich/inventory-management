@@ -1,6 +1,7 @@
 package jacobreid.view_controller;
 
 import jacobreid.JacobReid;
+import jacobreid.model.Inhouse;
 import jacobreid.model.Part;
 import java.io.IOException;
 import javafx.collections.ObservableList;
@@ -9,18 +10,17 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MainController {
-
-    @FXML
-    private BorderPane Main;
 
     @FXML
     private Button exitButton;
@@ -108,7 +108,6 @@ public class MainController {
     }
 
     public void setMain(JacobReid main) {
-        System.out.println("setMain function");
         this.main = main;
 
         // Add observable list data to the table
@@ -116,21 +115,28 @@ public class MainController {
     }
 
     @FXML
-    void handleAddPart(ActionEvent event) throws IOException {
-        Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Part.fxml"));
-        Parent root = loader.load();
-        PartController partController = loader.getController();
-        partController.setPartLabel("Add Part");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(addPartButton.getScene().getWindow());
-        stage.showAndWait();
+    void handleAddPart(ActionEvent event) {
+        Inhouse tempPart = null;
+        boolean saveClicked = main.showPartDialog(tempPart);
+        if (saveClicked) {
+            main.getParts().add(tempPart);
+        }
     }
 
     @FXML
     void handleDeletePart(ActionEvent event) {
+        int index = partsTableView.getSelectionModel().getSelectedIndex();
+        if (index >= 0) {
+            partsTableView.getItems().remove(index);
+        } else {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.initOwner(main.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Person Selected");
+            alert.setContentText("Please select a person in the table.");
 
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -139,16 +145,19 @@ public class MainController {
     }
 
     @FXML
-    void handleModifyPart(ActionEvent event) throws IOException {
-        Stage stage = new Stage();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("Part.fxml"));
-        Parent root = loader.load();
-        PartController partController = loader.getController();
-        partController.setPartLabel("Modify Part");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(addPartButton.getScene().getWindow());
-        stage.showAndWait();
+    void handleModifyPart(ActionEvent event) {
+        Part part = partsTableView.getSelectionModel().getSelectedItem();
+        if (part != null) {
+            main.showPartDialog(part);
+        } else {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.initOwner(main.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Person Selected");
+            alert.setContentText("Please select a person in the table.");
+
+            alert.showAndWait();
+        }
     }
 
     @FXML

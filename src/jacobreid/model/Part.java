@@ -17,25 +17,13 @@ import javafx.beans.property.StringProperty;
  * @author sirjackovich
  */
 public abstract class Part {
-    private int ID = 0;
+    private static int ID = 0;
     private final IntegerProperty partID;
-    private StringProperty name;
-    private DoubleProperty price;
-    private IntegerProperty inventory;
-    private IntegerProperty min;
-    private IntegerProperty max;
-    
-    /**
-     * Default constructor.
-     */
-    public Part() {
-        this.partID = null;
-        this.name = null;
-        this.price = null;
-        this.inventory = null;
-        this.min = null;
-        this.max = null;
-    }
+    private final StringProperty name;
+    private final DoubleProperty price;
+    private final IntegerProperty inventory;
+    private final IntegerProperty min;
+    private final IntegerProperty max;
 
     /**
      * Constructor with some initial data.
@@ -55,12 +43,12 @@ public abstract class Part {
         this.max = new SimpleIntegerProperty(max);
     }
     
-//   We auto generate the ID so there is no need for a setter function   
-//   void setPartID(int id){
-//        partID = id;
-//   }
+// we auto generate the id so you should never need to set it
+//    public void setID(){
+//       this.partID.set(this.generateID());
+//    }
     
-    public int getPartID(){
+    public int getID(){
         return this.partID.get();
     }
     

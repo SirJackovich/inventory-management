@@ -14,17 +14,9 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 public final class Inhouse extends Part{
     private IntegerProperty machineID;
-    
-    /**
-     * Default constructor.
-     */
-    public Inhouse() {
-        super();
-        this.machineID = null;
-    }
 
-    public Inhouse(String name, double price, int inStock, int min, int max, int machineID) {
-        super(name, price, inStock, min, max);
+    public Inhouse(String name, double price, int inventory, int min, int max, int machineID) {
+        super(name, price, inventory, min, max);
         setMachineID(machineID);
     }
 
