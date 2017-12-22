@@ -67,7 +67,7 @@ public class PartController {
         inHouseRadioButton.setSelected(true);
         inHouseRadioButton.setToggleGroup(group);
         OutsourcedRadioButton.setToggleGroup(group);
-        partTextLabel.setText("Company Name");
+        partTextLabel.setText("Machine ID");
         IDTextField.setDisable(true);
     }
     
@@ -84,32 +84,35 @@ public class PartController {
 
     @FXML
     void handleInHouse(ActionEvent event) {
-        partTextLabel.setText("Company Name");
+        partTextLabel.setText("Machine ID");
     }
 
     @FXML
     void handleOutsourced(ActionEvent event) {
-        partTextLabel.setText("Machine ID");
+        partTextLabel.setText("Company Name");
     }
 
     @FXML
     void handleSave(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
+        loader.load();
         MainController mainController = loader.getController();
         parts = mainController.getParts();
         RadioButton selected = (RadioButton)group.getSelectedToggle();
         String partType = selected.getText();
         String name = nameTextField.getText();
-        String inventory = inventoryTextField.getText();
-        String price = priceTextField.getText();
-        String max = maxTextField.getText();
-        String min = minTextField.getText();
+        int inventory = Integer.parseInt(inventoryTextField.getText());
+        double price = Double.parseDouble(priceTextField.getText());
+        int max = Integer.parseInt(maxTextField.getText());
+        int min = Integer.parseInt(minTextField.getText());
         String partText = partTextField.getText();
+        Part part;
         if("Outsourced".equals(partType)){
-            parts.add(new Outsourced(name, Double.parseDouble(price), Integer.parseInt(inventory), Integer.parseInt(min), Integer.parseInt(max), partText));
+            part = new Outsourced(name, price, inventory, min, max, partText);
         }else{
-           parts.add(new Inhouse(name, Double.parseDouble(price), Integer.parseInt(inventory), Integer.parseInt(min), Integer.parseInt(max), Integer.parseInt(partText)));
+            part = new Inhouse(name, price, inventory, min, max, Integer.parseInt(partText));
         }
+        parts.add(part);
         // TODO: need to bind the part to the table cells??
         mainController.setParts(parts);
         Stage stage = (Stage) saveButton.getScene().getWindow();
