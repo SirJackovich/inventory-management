@@ -18,12 +18,12 @@ import javafx.beans.property.StringProperty;
  */
 public abstract class Part {
     private static int ID = 0;
-    private IntegerProperty partID;
-    private StringProperty name;
-    private DoubleProperty price;
-    private IntegerProperty inventory;
-    private IntegerProperty min;
-    private IntegerProperty max;
+    private final IntegerProperty partID;
+    private final StringProperty name;
+    private final DoubleProperty price;
+    private final IntegerProperty inventory;
+    private final IntegerProperty min;
+    private final IntegerProperty max;
 
     /**
      * Constructor with some initial data.

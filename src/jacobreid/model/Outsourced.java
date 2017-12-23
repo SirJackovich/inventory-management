@@ -13,7 +13,7 @@ import javafx.beans.property.StringProperty;
  * @author sirjackovich
  */
 public final class Outsourced extends Part{
-    private StringProperty companyName;
+    private final StringProperty companyName;
 
     public Outsourced(String name, double price, int inventory, int min, int max, String companyName) {
         super(name, price, inventory, min, max);

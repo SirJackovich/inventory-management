@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  * @author sirjackovich
  */
 public final class Inhouse extends Part{
-    private IntegerProperty machineID;
+    private final IntegerProperty machineID;
 
     public Inhouse(String name, double price, int inventory, int min, int max, int machineID) {
         super(name, price, inventory, min, max);

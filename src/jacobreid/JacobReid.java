@@ -15,7 +15,6 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -67,7 +66,6 @@ public class JacobReid extends Application {
             primaryStage.show();
             
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
     
@@ -98,7 +96,6 @@ public class JacobReid extends Application {
             return partController.getPart();
             
         } catch (IOException e) {
-           e.printStackTrace();
            return null;
        }
    }
@@ -171,7 +168,6 @@ public class JacobReid extends Application {
             return partController.isSaveClicked();
             
         } catch (IOException e) {
-           e.printStackTrace();
            return false;
        }
    }
@@ -204,7 +200,6 @@ public class JacobReid extends Application {
             return partController.isSaveClicked();
             
         } catch (IOException e) {
-           e.printStackTrace();
            return false;
        }
    }
