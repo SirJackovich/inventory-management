@@ -116,9 +116,9 @@ public abstract class Part {
         return max;
     }
     
-//    public String getPartType(){
-//        return "";
-//    }
+    public String getPartType(){
+        return "";
+    }
     
     private int generateID(){
         return ID++;

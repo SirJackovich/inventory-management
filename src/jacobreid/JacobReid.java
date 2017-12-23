@@ -71,7 +71,7 @@ public class JacobReid extends Application {
         }
     }
     
-   public Part showPartDialog() {
+   public Part showAddPartDialog() {
        try {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
@@ -80,7 +80,7 @@ public class JacobReid extends Application {
             
             // Create the dialog Stage.
             Stage partStage = new Stage();
-            // partStage.setTitle("Modify Part");
+            partStage.setTitle("Add Part");
             partStage.initModality(Modality.APPLICATION_MODAL);
             partStage.initOwner(primaryStage);
             Scene scene = new Scene(page);
@@ -88,16 +88,124 @@ public class JacobReid extends Application {
 
             // set the part in the controller
             PartController partController = loader.getController();
-            // partController.setPartLabel("Modify Part");
+            partController.setPartLabel("Add Part");
             partController.setPartStage(partStage);
             // partController.setInhousePart(inhousePart);
 
             partStage.showAndWait();
-
+            
+            
             return partController.getPart();
-       } catch (IOException e) {
+            
+        } catch (IOException e) {
            e.printStackTrace();
            return null;
+       }
+   }
+   
+//   public boolean showModifyPartDialog(Part part) {
+//       try {
+//            // Load the fxml file and create a new stage for the popup dialog.
+//            FXMLLoader loader = new FXMLLoader();
+//            loader.setLocation(JacobReid.class.getResource("view_controller/Part.fxml"));
+//            AnchorPane page = (AnchorPane) loader.load();
+//            
+//            // Create the dialog Stage.
+//            Stage partStage = new Stage();
+//            partStage.setTitle("Modify Part");
+//            partStage.initModality(Modality.APPLICATION_MODAL);
+//            partStage.initOwner(primaryStage);
+//            Scene scene = new Scene(page);
+//            partStage.setScene(scene);
+//
+//            // set the part in the controller
+//            PartController partController = loader.getController();
+//            partController.setPartLabel("Modify Part");
+//            partController.setPartStage(partStage);
+//            if("Outsourced".equals(partController.getPartType())){
+//                // partController.setInhousePart(inhousePart);
+//            }else{
+//                Inhouse inhousePart = new Inhouse(part.getName(), part.getPrice(), part.getInventory(), part.getMin(), part.getMax());
+//                partController.setInhousePart(part);
+//            }
+//            
+//                
+//            
+//
+//            partStage.showAndWait();
+//            
+//            
+//            return partController.getPart();
+//            
+//        } catch (IOException e) {
+//           e.printStackTrace();
+//           return null;
+//       }
+//   }
+   
+   public boolean showModifyInhousePartDialog(Inhouse inhousePart) {
+       try {
+           
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(JacobReid.class.getResource("view_controller/Part.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Create the dialog Stage.
+            Stage partStage = new Stage();
+            partStage.setTitle("Modify Part");
+            partStage.initModality(Modality.APPLICATION_MODAL);
+            partStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            partStage.setScene(scene);
+
+            // set the part in the controller
+            PartController partController = loader.getController();
+            partController.setPartLabel("Modify Part");
+            partController.setPartStage(partStage);
+            partController.setInhousePart(inhousePart);
+            
+            partStage.showAndWait();
+            
+            
+            return partController.isSaveClicked();
+            
+        } catch (IOException e) {
+           e.printStackTrace();
+           return false;
+       }
+   }
+   
+   public boolean showModifyOutsourcedPartDialog(Outsourced outsourcedPart) {
+       try {
+           
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(JacobReid.class.getResource("view_controller/Part.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Create the dialog Stage.
+            Stage partStage = new Stage();
+            partStage.setTitle("Modify Part");
+            partStage.initModality(Modality.APPLICATION_MODAL);
+            partStage.initOwner(primaryStage);
+            Scene scene = new Scene(page);
+            partStage.setScene(scene);
+
+            // set the part in the controller
+            PartController partController = loader.getController();
+            partController.setPartLabel("Modify Part");
+            partController.setPartStage(partStage);
+            partController.setOutsourcedPart(outsourcedPart);
+            
+            partStage.showAndWait();
+            
+            
+            return partController.isSaveClicked();
+            
+        } catch (IOException e) {
+           e.printStackTrace();
+           return false;
        }
    }
     

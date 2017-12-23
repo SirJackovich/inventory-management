@@ -17,19 +17,23 @@ public final class Inhouse extends Part{
 
     public Inhouse(String name, double price, int inventory, int min, int max, int machineID) {
         super(name, price, inventory, min, max);
-        setMachineID(machineID);
+        this.machineID = new SimpleIntegerProperty(machineID);
     }
 
     public void setMachineID(int machineID) {
-       this.machineID = new SimpleIntegerProperty(machineID);
+       this.machineID.set(machineID);
     }
 
     public int getMachineID() {
         return this.machineID.get();
     }
     
-//    @Override
-//    public String getPartType(){
-//        return "Inhouse";
-//    }
+    public IntegerProperty machineIDProperty() {
+        return machineID;
+    }
+    
+    @Override
+    public String getPartType(){
+        return "Inhouse";
+    }
 }

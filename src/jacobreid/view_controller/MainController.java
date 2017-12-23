@@ -2,6 +2,7 @@ package jacobreid.view_controller;
 
 import jacobreid.JacobReid;
 import jacobreid.model.Inhouse;
+import jacobreid.model.Outsourced;
 import jacobreid.model.Part;
 import java.io.IOException;
 import javafx.collections.FXCollections;
@@ -117,7 +118,10 @@ public class MainController {
 
     @FXML
     void handleAddPart(ActionEvent event) {
-        main.getParts().add(main.showPartDialog());
+        Part part = main.showAddPartDialog();
+        if(part != null){
+            main.getParts().add(part);
+        }
     }
 
     @FXML
@@ -143,9 +147,16 @@ public class MainController {
 
     @FXML
     void handleModifyPart(ActionEvent event) {
-        Part part = partsTableView.getSelectionModel().getSelectedItem();
+        Part part = partsTableView.getSelectionModel().getSelectedItem();        
         if (part != null) {
-            // main.showPartDialog(part);
+            boolean updated;
+            if("Outsourced".equals(part.getPartType())){
+                Outsourced outsourcedPart = (Outsourced) partsTableView.getSelectionModel().getSelectedItem();
+                updated = main.showModifyOutsourcedPartDialog(outsourcedPart);
+            }else{
+                Inhouse inhousePart = (Inhouse) partsTableView.getSelectionModel().getSelectedItem();
+                updated = main.showModifyInhousePartDialog(inhousePart);
+            }
         } else {
             Alert alert = new Alert(AlertType.WARNING);
             alert.initOwner(main.getPrimaryStage());

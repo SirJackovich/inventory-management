@@ -65,6 +65,7 @@ public class PartController {
     private Stage partStage;
     private Inhouse inhousePart;
     private Outsourced outsourcedPart;
+    private boolean saveClicked;
     
     @FXML
     public void initialize() {
@@ -79,15 +80,29 @@ public class PartController {
         this.partStage = partStage;
     }
     
-//    public void setInhousePart(Inhouse inhousePart) {
-//        nameTextField.setText(inhousePart.getName());
-//        inventoryTextField.setText(Integer.toString(inhousePart.getInventory()));
-//        priceTextField.setText(Double.toString(inhousePart.getPrice()));
-//        maxTextField.setText(Integer.toString(inhousePart.getMax()));
-//        minTextField.setText(Integer.toString(inhousePart.getMin()));
-//        IDTextField.setText(Integer.toString(inhousePart.getID()));
-//        partTextField.setText(Integer.toString(inhousePart.getMachineID()));
-//    }
+    public void setInhousePart(Inhouse inhousePart) {
+        nameTextField.setText(inhousePart.getName());
+        inventoryTextField.setText(Integer.toString(inhousePart.getInventory()));
+        priceTextField.setText(Double.toString(inhousePart.getPrice()));
+        maxTextField.setText(Integer.toString(inhousePart.getMax()));
+        minTextField.setText(Integer.toString(inhousePart.getMin()));
+        IDTextField.setText(Integer.toString(inhousePart.getID()));
+        partTextField.setText(Integer.toString(inhousePart.getMachineID()));
+    }
+    
+    public void setOutsourcedPart(Outsourced outsourcedPart) {
+        nameTextField.setText(outsourcedPart.getName());
+        inventoryTextField.setText(Integer.toString(outsourcedPart.getInventory()));
+        priceTextField.setText(Double.toString(outsourcedPart.getPrice()));
+        maxTextField.setText(Integer.toString(outsourcedPart.getMax()));
+        minTextField.setText(Integer.toString(outsourcedPart.getMin()));
+        IDTextField.setText(Integer.toString(outsourcedPart.getID()));
+        partTextField.setText(outsourcedPart.getCompanyName());
+    }
+        
+    public boolean isSaveClicked() {
+        return saveClicked;
+    }
     
     public Part getPart(){
         if("Outsourced".equals(getPartType())){
@@ -111,7 +126,7 @@ public class PartController {
     }
     
     @FXML
-    void setPartLabel(String str){
+    public void setPartLabel(String str){
         partLabel.setText(str);
     }
 
@@ -170,7 +185,7 @@ public class PartController {
 //                // part.setCompanyName(partTextField.getText())
 //                part.setMax(Integer.parseInt(maxTextField.getText()));
 //                part.setMin(Integer.parseInt(minTextField.getText()));            
-           
+           saveClicked = true;
             partStage.close();
         }
     }
