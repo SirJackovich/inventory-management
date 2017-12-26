@@ -52,4 +52,8 @@ public class Inventory {
     public void updatePart(int index){
         // TODO: figure out what to do here
     }
+    
+    public ObservableList<Part> getParts(){
+      return allParts;
+    }
 }

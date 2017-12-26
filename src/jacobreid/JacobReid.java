@@ -6,13 +6,13 @@
 package jacobreid;
 
 import jacobreid.model.Inhouse;
+import jacobreid.model.Inventory;
 import jacobreid.model.Outsourced;
 import jacobreid.model.Part;
 import jacobreid.view_controller.MainController;
 import jacobreid.view_controller.PartController;
 import java.io.IOException;
 import javafx.application.Application;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,18 +28,18 @@ import javafx.stage.Stage;
 public class JacobReid extends Application {
   private Stage primaryStage;
   private BorderPane mainLayout;
-  private final ObservableList<Part> parts = FXCollections.observableArrayList();
+  Inventory inventory = new Inventory();
 
   /**
    * Constructor
    */
   public JacobReid() {
-    parts.add(new Outsourced("outsourced part", 15, 3, 1, 5, "companyName"));
-    parts.add(new Inhouse("inhouse part", 10, 2, 1, 5, 7));
+    inventory.addPart(new Outsourced("outsourced part", 15, 3, 1, 5, "companyName"));
+    inventory.addPart(new Inhouse("inhouse part", 10, 2, 1, 5, 7));
   }
 
   public ObservableList<Part> getParts() {
-    return parts;
+    return inventory.getParts();
   }
     
   @Override
@@ -69,7 +69,15 @@ public class JacobReid extends Application {
     }
   }
     
-  public Part showPartDialog(Part part) {
+  public Part showAddPartDialog(Part part) {
+      return partDialog(part, "Add Part", false);
+  }
+  
+  public Part showModifyPartDialog(Part part) {
+    return partDialog(part, "Modify part", true);
+  }
+  
+  private Part partDialog(Part part, String title, boolean disableRadio){
     try {
       // Load the fxml file and create a new stage for the popup dialog.
       FXMLLoader loader = new FXMLLoader();
@@ -78,7 +86,7 @@ public class JacobReid extends Application {
 
       // Create the dialog Stage.
       Stage partStage = new Stage();
-      // partStage.setTitle("Add Part");
+      partStage.setTitle(title);
       partStage.initModality(Modality.APPLICATION_MODAL);
       partStage.initOwner(primaryStage);
       Scene scene = new Scene(page);
@@ -86,7 +94,10 @@ public class JacobReid extends Application {
 
       // set the part in the controller
       PartController partController = loader.getController();
-      // partController.setPartLabel("Add Part");
+      partController.setPartLabel(title);
+      if(disableRadio){
+        partController.disableRadio();
+      }
       partController.setPartStage(partStage);
       if(part != null){
         partController.setPart(part);
@@ -99,11 +110,19 @@ public class JacobReid extends Application {
 
      } catch (IOException e) {
       return null;
-    }
+     }
   }
+  
+//  public Part partsSearch(String text) {
+//    for()
+//  }
    
   public Stage getPrimaryStage() {
     return primaryStage;
+  }
+  
+  public void close(){
+    primaryStage.close();
   }
 
   /**

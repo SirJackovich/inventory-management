@@ -97,7 +97,7 @@ public class MainController {
 
   @FXML
   void handleAddPart(ActionEvent event) {
-    Part part = main.showPartDialog(null);
+    Part part = main.showAddPartDialog(null);
     if(part != null){
       main.getParts().add(part);
     }
@@ -120,14 +120,14 @@ public class MainController {
 
   @FXML
   void handleExit(ActionEvent event) {
-
+    main.close();
   }
 
   @FXML
   void handleModifyPart(ActionEvent event) {
     Part part = partsTableView.getSelectionModel().getSelectedItem(); 
     if (part != null) {
-      main.showPartDialog(part);
+      main.showModifyPartDialog(part);
     } else {
       Alert alert = new Alert(AlertType.WARNING);
       alert.initOwner(main.getPrimaryStage());
@@ -136,6 +136,12 @@ public class MainController {
       alert.setContentText("Please select a person in the table.");
       alert.showAndWait();
     }
+  }
+  
+  @FXML
+  void handleSearchParts(ActionEvent event) {
+    // Part part = main.partsSearch(partsTextField.getText());
+    
   }
 
   @FXML
@@ -150,11 +156,6 @@ public class MainController {
 
   @FXML
   void handleProductsSearch(ActionEvent event) {
-
-  }
-
-  @FXML
-  void handleSearchParts(ActionEvent event) {
 
   }
 

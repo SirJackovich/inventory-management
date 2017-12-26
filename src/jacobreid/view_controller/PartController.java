@@ -80,8 +80,14 @@ public class PartController {
 
     if("Outsourced".equals(part.getPartType())){
       partTextField.setText(((Outsourced)part).getCompanyName());
+      inHouseRadioButton.setSelected(false);
+      OutsourcedRadioButton.setSelected(true);
+      partTextLabel.setText("Company Name");
     }else{
       partTextField.setText(Integer.toString(((Inhouse)part).getMachineID()));
+      inHouseRadioButton.setSelected(true);
+      OutsourcedRadioButton.setSelected(false);
+      partTextLabel.setText("Machine ID");
     }
     this.part = part;
   }
@@ -95,6 +101,12 @@ public class PartController {
   public void setPartLabel(String str){
     partLabel.setText(str);
   }
+  
+  @FXML
+  public void disableRadio(){
+    inHouseRadioButton.setDisable(true);
+    OutsourcedRadioButton.setDisable(true);
+  }
 
   @FXML
   void handleCancel(ActionEvent event) {
@@ -104,11 +116,21 @@ public class PartController {
   @FXML
   void handleInHouse(ActionEvent event) {
     partTextLabel.setText("Machine ID");
+    if(this.part != null){
+      partTextField.setText(Integer.toString(((Inhouse)part).getMachineID()));
+    }else{
+      partTextField.setText("");
+    }
   }
 
   @FXML
   void handleOutsourced(ActionEvent event) {
     partTextLabel.setText("Company Name");
+    if(this.part != null){
+      partTextField.setText(((Outsourced)this.part).getCompanyName());
+    }else{
+      partTextField.setText("");
+    }
   }
 
   @FXML
