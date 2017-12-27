@@ -100,9 +100,9 @@ public abstract class Part {
     return this.min.get();
   }
 
-  public IntegerProperty minProperty() {
-    return min;
-  }
+//  public IntegerProperty minProperty() {
+//    return min;
+//  }
 
   public void setMax(int max){
     this.max.set(max);
@@ -112,9 +112,9 @@ public abstract class Part {
     return this.max.get();
   }
     
-  public IntegerProperty maxProperty() {
-    return max;
-  }
+//  public IntegerProperty maxProperty() {
+//    return max;
+//  }
 
   public String getPartType(){
     return "";

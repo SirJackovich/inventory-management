@@ -9,10 +9,13 @@ import jacobreid.model.Inhouse;
 import jacobreid.model.Inventory;
 import jacobreid.model.Outsourced;
 import jacobreid.model.Part;
+import jacobreid.model.Product;
 import jacobreid.view_controller.MainController;
 import jacobreid.view_controller.PartController;
+import jacobreid.view_controller.ProductController;
 import java.io.IOException;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -36,37 +39,39 @@ public class JacobReid extends Application {
   public JacobReid() {
     inventory.addPart(new Outsourced("outsourced part", 15, 3, 1, 5, "companyName"));
     inventory.addPart(new Inhouse("inhouse part", 10, 2, 1, 5, 7));
+    inventory.addProduct(new Product("product one", 15, 3, 1, 5));
+    inventory.addProduct(new Product("product two", 10, 2, 1, 5));
   }
 
   public ObservableList<Part> getParts() {
     return inventory.getParts();
   }
+  
+  public ObservableList<Product> getProducts() {
+    return inventory.getProducts();
+  }
     
   @Override
-  public void start(Stage primaryStage) {
+  public void start(Stage primaryStage) throws IOException {
     this.primaryStage = primaryStage;
     this.primaryStage.setTitle("Inventory Management System");
     showMain();
   }
     
-  public void showMain() {
-    try {
-      // Load main layout from fxml file
-      FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(JacobReid.class.getResource("view_controller/Main.fxml"));
-      mainLayout = (BorderPane) loader.load();
+  public void showMain() throws IOException {
+    // Load main layout from fxml file
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(JacobReid.class.getResource("view_controller/Main.fxml"));
+    mainLayout = (BorderPane) loader.load();
 
-      // Give the controller access to the main app.
-      MainController mainController = loader.getController();
-      mainController.setMain(this);
+    // Give the controller access to the main app.
+    MainController mainController = loader.getController();
+    mainController.setMain(this);
 
-      // Show the scene containing the main layout
-      Scene scene = new Scene(mainLayout);
-      primaryStage.setScene(scene);
-      primaryStage.show();
-
-    } catch (IOException e) {
-    }
+    // Show the scene containing the main layout
+    Scene scene = new Scene(mainLayout);
+    primaryStage.setScene(scene);
+    primaryStage.show();
   }
     
   public Part showAddPartDialog(Part part) {
@@ -113,9 +118,58 @@ public class JacobReid extends Application {
      }
   }
   
-//  public Part partsSearch(String text) {
-//    for()
-//  }
+  public Product productDialog(Product product){
+    try {
+      // Load the fxml file and create a new stage for the popup dialog.
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(JacobReid.class.getResource("view_controller/Product.fxml"));
+      AnchorPane page = (AnchorPane) loader.load();
+
+      // Create the dialog Stage.
+      Stage productStage = new Stage();
+      // productStage.setTitle(title);
+      productStage.initModality(Modality.APPLICATION_MODAL);
+      productStage.initOwner(primaryStage);
+      Scene scene = new Scene(page);
+      productStage.setScene(scene);
+
+      // set the part in the controller
+      ProductController prodcutController = loader.getController();
+      // prodcutController.setProductLabel(title);
+      
+      prodcutController.setProductStage(productStage);
+      if(product != null){
+        prodcutController.setProduct(product);
+      }
+
+
+      productStage.showAndWait();
+
+      return prodcutController.getProduct();
+
+     } catch (IOException e) {
+      return null;
+     }
+  }
+  
+  public ObservableList<Part> searchParts(String text) {
+    ObservableList<Part> tempParts = FXCollections.observableArrayList();
+    try{
+      int partNumber = Integer.parseInt(text);
+      for(Part part: inventory.getParts()){
+        if(part.getID() == partNumber){
+          tempParts.add(part);
+        }
+      }
+    } catch(NumberFormatException e) {
+      for(Part part: inventory.getParts()){
+        if(part.getName().contains(text)){
+          tempParts.add(part);
+        }
+      }
+    }
+    return tempParts;
+  }
    
   public Stage getPrimaryStage() {
     return primaryStage;

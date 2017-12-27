@@ -2,6 +2,7 @@ package jacobreid.view_controller;
 
 import jacobreid.JacobReid;
 import jacobreid.model.Part;
+import jacobreid.model.Product;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -53,19 +54,19 @@ public class MainController {
   private Button searchProductsButton;
 
   @FXML
-  private TableView<?> productsTableView;
+  private TableView<Product> productsTableView;
 
   @FXML
-  private TableColumn<?, ?> productIDColumn;
+  private TableColumn<Product, Integer> productIDColumn;
 
   @FXML
-  private TableColumn<?, ?> productNameColumn;
+  private TableColumn<Product, String> productNameColumn;
 
   @FXML
-  private TableColumn<?, ?> productInventoryColumn;
+  private TableColumn<Product, Integer> productInventoryColumn;
 
   @FXML
-  private TableColumn<?, ?> productPriceColumn;
+  private TableColumn<Product, Double> productPriceColumn;
 
   @FXML
   private Button addProductButton;
@@ -81,18 +82,25 @@ public class MainController {
     
   @FXML
   private void initialize() {
-    // Initialize the tables
+    // Initialize the part table
     partIDColumn.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
     partNameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
     partInventoryColumn.setCellValueFactory(cellData -> cellData.getValue().inventoryProperty().asObject());
     partPriceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
+    
+    // Initialize the product table
+    productIDColumn.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
+    productNameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+    productInventoryColumn.setCellValueFactory(cellData -> cellData.getValue().inventoryProperty().asObject());
+    productPriceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
   }
 
   public void setMain(JacobReid main) {
     this.main = main;
 
-    // Add observable list data to the table
+    // Add data to tables
     partsTableView.setItems(main.getParts());
+    productsTableView.setItems(main.getProducts());
   }
 
   @FXML
@@ -140,8 +148,12 @@ public class MainController {
   
   @FXML
   void handleSearchParts(ActionEvent event) {
-    // Part part = main.partsSearch(partsTextField.getText());
-    
+    String search = partsTextField.getText();
+    if("".equals(search)){
+      partsTableView.setItems(main.getParts());
+    }else{
+      partsTableView.setItems(main.searchParts(search));
+    }
   }
 
   @FXML
@@ -150,12 +162,15 @@ public class MainController {
   }
 
   @FXML
-  void handleProductAdd(ActionEvent event) {
-
+  void handleAddProduct(ActionEvent event) {
+    Product product = main.productDialog(null);
+    if(product != null){
+      main.getProducts().add(product);
+    }
   }
 
   @FXML
-  void handleProductsSearch(ActionEvent event) {
+  void handleSearchProducts(ActionEvent event) {
 
   }
 
