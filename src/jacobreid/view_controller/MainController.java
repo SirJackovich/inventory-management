@@ -3,6 +3,7 @@ package jacobreid.view_controller;
 import jacobreid.JacobReid;
 import jacobreid.model.Part;
 import jacobreid.model.Product;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -11,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class MainController {
 
@@ -78,7 +80,9 @@ public class MainController {
   private Button deleteProductButton;
 
   // Reference to the main application.
-  private JacobReid main;
+  private JacobReid app;
+  
+  private Stage primaryStage;
     
   @FXML
   private void initialize() {
@@ -95,19 +99,23 @@ public class MainController {
     productPriceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
   }
 
-  public void setMain(JacobReid main) {
-    this.main = main;
+  public void setApp(JacobReid app) {
+    this.app = app;
 
     // Add data to tables
-    partsTableView.setItems(main.getParts());
-    productsTableView.setItems(main.getProducts());
+    partsTableView.setItems(app.getInventory().getParts());
+    productsTableView.setItems(app.getInventory().getProducts());
+  }
+  
+  public void setPrimaryStage(Stage primaryStage){
+    this.primaryStage = primaryStage;
   }
 
   @FXML
-  void handleAddPart(ActionEvent event) {
-    Part part = main.showAddPartDialog(null);
+  void handleAddPart(ActionEvent event) throws IOException {
+    Part part = PartController.showDialog(primaryStage, null, "Add Part", false);;
     if(part != null){
-      main.getParts().add(part);
+      app.getInventory().getParts().add(part);
     }
   }
 
@@ -115,34 +123,25 @@ public class MainController {
   void handleDeletePart(ActionEvent event) {
     int index = partsTableView.getSelectionModel().getSelectedIndex();
     if (index >= 0) {
+      // TODO see if it removes it from the inventory
       partsTableView.getItems().remove(index);
     } else {
-      Alert alert = new Alert(AlertType.WARNING);
-      alert.initOwner(main.getPrimaryStage());
-      alert.setTitle("No Selection");
-      alert.setHeaderText("No Person Selected");
-      alert.setContentText("Please select a person in the table.");
-      alert.showAndWait();
+      noSelectionAlert();
     }
   }
 
   @FXML
   void handleExit(ActionEvent event) {
-    main.close();
+    app.close();
   }
 
   @FXML
-  void handleModifyPart(ActionEvent event) {
+  void handleModifyPart(ActionEvent event) throws IOException {
     Part part = partsTableView.getSelectionModel().getSelectedItem(); 
     if (part != null) {
-      main.showModifyPartDialog(part);
+      PartController.showDialog(primaryStage, part, "Modify part", true);
     } else {
-      Alert alert = new Alert(AlertType.WARNING);
-      alert.initOwner(main.getPrimaryStage());
-      alert.setTitle("No Selection");
-      alert.setHeaderText("No Person Selected");
-      alert.setContentText("Please select a person in the table.");
-      alert.showAndWait();
+      noSelectionAlert();
     }
   }
   
@@ -150,9 +149,9 @@ public class MainController {
   void handleSearchParts(ActionEvent event) {
     String search = partsTextField.getText();
     if("".equals(search)){
-      partsTableView.setItems(main.getParts());
+      partsTableView.setItems(app.getInventory().getParts());
     }else{
-      partsTableView.setItems(main.searchParts(search));
+      partsTableView.setItems(app.getInventory().searchParts(search));
     }
   }
 
@@ -162,16 +161,25 @@ public class MainController {
   }
 
   @FXML
-  void handleAddProduct(ActionEvent event) {
-    Product product = main.productDialog(null);
+  void handleAddProduct(ActionEvent event) throws IOException {
+    Product product = ProductController.showDialog(primaryStage, null);
     if(product != null){
-      main.getProducts().add(product);
+      app.getInventory().getProducts().add(product);
     }
   }
 
   @FXML
   void handleSearchProducts(ActionEvent event) {
 
+  }
+  
+  private void noSelectionAlert(){
+    Alert alert = new Alert(AlertType.WARNING);
+    alert.initOwner(app.getPrimaryStage());
+    alert.setTitle("No Selection");
+    alert.setHeaderText("No Person Selected");
+    alert.setContentText("Please select a person in the table.");
+    alert.showAndWait();
   }
 
 }

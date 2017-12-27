@@ -1,14 +1,20 @@
 package jacobreid.view_controller;
 
+import jacobreid.JacobReid;
 import jacobreid.model.Inhouse;
 import jacobreid.model.Outsourced;
 import jacobreid.model.Part;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PartController {
@@ -51,8 +57,8 @@ public class PartController {
     
   private Stage partStage;
   private Part part;
-    
-    
+  
+  
   @FXML
   public void initialize() {
     inHouseRadioButton.setSelected(true);
@@ -215,5 +221,36 @@ public class PartController {
 //    }
 //    return true;
 //  }
+  
+  public static Part showDialog(Stage primaryStage, Part part, String title, boolean disableRadio) throws IOException{
+    
+      // Load the fxml file and create a new stage for the popup dialog.
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(JacobReid.class.getResource("view_controller/Part.fxml"));
+      AnchorPane page = (AnchorPane) loader.load();
+
+      // Create the dialog Stage.
+      Stage partStage = new Stage();
+      partStage.setTitle(title);
+      partStage.initModality(Modality.APPLICATION_MODAL);
+      partStage.initOwner(primaryStage);
+      Scene scene = new Scene(page);
+      partStage.setScene(scene);
+
+      // set the part in the controller
+      PartController partController = loader.getController();
+      partController.setPartLabel(title);
+      if(disableRadio){
+        partController.disableRadio();
+      }
+      partController.setPartStage(partStage);
+      if(part != null){
+        partController.setPart(part);
+      }
+
+      partStage.showAndWait();
+
+      return partController.getPart();
+  }
 
 }

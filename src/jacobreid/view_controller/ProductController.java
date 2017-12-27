@@ -1,13 +1,20 @@
 package jacobreid.view_controller;
 
+import jacobreid.JacobReid;
+import jacobreid.model.Part;
 import jacobreid.model.Product;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ProductController {
@@ -19,37 +26,37 @@ public class ProductController {
   private Button searchButton;
 
   @FXML
-  private TableView<?> allPartsTableView;
+  private TableView<Part> allPartsTableView;
 
   @FXML
-  private TableColumn<?, ?> allPartsIDColumn;
+  private TableColumn<Part, Integer> allPartsIDColumn;
 
   @FXML
-  private TableColumn<?, ?> allPartsNameColumn;
+  private TableColumn<Part, String> allPartsNameColumn;
 
   @FXML
-  private TableColumn<?, ?> allPartsInventoryColumn;
+  private TableColumn<Part, Integer> allPartsInventoryColumn;
 
   @FXML
-  private TableColumn<?, ?> allPartsPriceColumn;
+  private TableColumn<Part, Double> allPartsPriceColumn;
 
   @FXML
   private Button addButton;
 
   @FXML
-  private TableView<?> productPartsTableView;
+  private TableView<Part> productPartsTableView;
 
   @FXML
-  private TableColumn<?, ?> productPartsIDColumn;
+  private TableColumn<Part, Integer> productPartsIDColumn;
 
   @FXML
-  private TableColumn<?, ?> productPartsNameColumn;
+  private TableColumn<Part, String> productPartsNameColumn;
 
   @FXML
-  private TableColumn<?, ?> productPartsInventoryColumn;
+  private TableColumn<Part, Integer> productPartsInventoryColumn;
 
   @FXML
-  private TableColumn<?, ?> productPartsPriceColumn;
+  private TableColumn<Part, Double> productPartsPriceColumn;
 
   @FXML
   private Button deleteButton;
@@ -125,6 +132,38 @@ public class ProductController {
 
   public Product getProduct() {
     return product;
+  }
+  
+  public static Product showDialog(Stage primaryStage, Product product) throws IOException{
+    
+      // Load the fxml file and create a new stage for the popup dialog.
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(JacobReid.class.getResource("view_controller/Product.fxml"));
+      AnchorPane page = (AnchorPane) loader.load();
+
+      // Create the dialog Stage.
+      Stage productStage = new Stage();
+      // productStage.setTitle(title);
+      productStage.initModality(Modality.APPLICATION_MODAL);
+      productStage.initOwner(primaryStage);
+      Scene scene = new Scene(page);
+      productStage.setScene(scene);
+
+      // set the part in the controller
+      ProductController prodcutController = loader.getController();
+      // prodcutController.setProductLabel(title);
+      
+      prodcutController.setProductStage(productStage);
+      if(product != null){
+        prodcutController.setProduct(product);
+      }
+
+
+      productStage.showAndWait();
+
+      return prodcutController.getProduct();
+
+    
   }
 
 }
