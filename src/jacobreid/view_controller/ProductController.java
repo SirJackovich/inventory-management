@@ -1,6 +1,8 @@
 package jacobreid.view_controller;
 
 import jacobreid.JacobReid;
+import jacobreid.model.Inhouse;
+import jacobreid.model.Outsourced;
 import jacobreid.model.Part;
 import jacobreid.model.Product;
 import java.io.IOException;
@@ -8,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -90,30 +93,88 @@ public class ProductController {
     
   private Stage productStage;
   private Product product;
+  
+  // Reference to the main application.
+  private JacobReid app;
+  
+  @FXML
+  private void initialize() {
+    IDTextField.setDisable(true);
+    
+    // Initialize the allParts table
+    allPartsIDColumn.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
+    allPartsNameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+    allPartsInventoryColumn.setCellValueFactory(cellData -> cellData.getValue().inventoryProperty().asObject());
+    allPartsPriceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
+    
+    // Initialize the productParts table
+    productPartsIDColumn.setCellValueFactory(cellData -> cellData.getValue().IDProperty().asObject());
+    productPartsNameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+    productPartsInventoryColumn.setCellValueFactory(cellData -> cellData.getValue().inventoryProperty().asObject());
+    productPartsPriceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
+  }
+  
+  public void setApp(JacobReid app) {
+    this.app = app;
+
+    // Add data to table
+    allPartsTableView.setItems(app.getInventory().getParts());
+  }
 
   @FXML
   void handleAdd(ActionEvent event) {
-    // data = allPartsTableView.getItems();
+    int index = allPartsTableView.getSelectionModel().getSelectedIndex();
+    if (index >= 0) {
+      // TODO see if it adds it to the inventory
+      productPartsTableView.getItems().add(allPartsTableView.getSelectionModel().getSelectedItem());
+    } else {
+      noSelectionAlert();
+    }
   }
 
   @FXML
   void handleCancel(ActionEvent event) {
-
+    productStage.close();
   }
 
   @FXML
   void handleDelete(ActionEvent event) {
-
+    int index = productPartsTableView.getSelectionModel().getSelectedIndex();
+    if (index >= 0) {
+      // TODO see if it removes it from the inventory
+      productPartsTableView.getItems().remove(index);
+    } else {
+      noSelectionAlert();
+    }
   }
 
   @FXML
   void handleSave(ActionEvent event) {
-
+    // if (isInputValid()) {
+      if(this.product == null){
+        this.product = new Product(nameTextField.getText(), Double.parseDouble(priceTextField.getText()), Integer.parseInt(inventoryTextField.getText()), Integer.parseInt(minTextField.getText()), Integer.parseInt(maxTextField.getText()), productPartsTableView.getItems());
+      }else {
+        this.product.setName(nameTextField.getText());
+        this.product.setPrice(Double.parseDouble(priceTextField.getText()));
+        this.product.setInventory(Integer.parseInt(inventoryTextField.getText()));
+        this.product.setMin(Integer.parseInt(minTextField.getText()));
+        this.product.setMax(Integer.parseInt(maxTextField.getText()));
+        productPartsTableView.getItems().forEach((part) -> {
+          this.product.addAssociatedPart(part);
+        });
+      }
+      productStage.close();
+    // }
   }
 
   @FXML
   void handleSearch(ActionEvent event) {
-
+    String search = partsTextField.getText();
+    if("".equals(search)){
+      allPartsTableView.setItems(app.getInventory().getParts());
+    }else{
+      allPartsTableView.setItems(app.getInventory().searchParts(search));
+    }
   }
 
   public void setProductStage(Stage productStage) {
@@ -127,6 +188,7 @@ public class ProductController {
     maxTextField.setText(Integer.toString(product.getMax()));
     minTextField.setText(Integer.toString(product.getMin()));
     IDTextField.setText(Integer.toString(product.getID()));
+    productPartsTableView.setItems(product.getAssociatedParts());
     this.product = product;
   }
 
@@ -134,7 +196,7 @@ public class ProductController {
     return product;
   }
   
-  public static Product showDialog(Stage primaryStage, Product product) throws IOException{
+  public static Product showDialog(JacobReid app, Stage primaryStage, Product product) throws IOException{
     
       // Load the fxml file and create a new stage for the popup dialog.
       FXMLLoader loader = new FXMLLoader();
@@ -151,6 +213,7 @@ public class ProductController {
 
       // set the part in the controller
       ProductController prodcutController = loader.getController();
+      prodcutController.setApp(app);
       // prodcutController.setProductLabel(title);
       
       prodcutController.setProductStage(productStage);
@@ -164,6 +227,15 @@ public class ProductController {
       return prodcutController.getProduct();
 
     
+  }
+  
+  private void noSelectionAlert(){
+    Alert alert = new Alert(Alert.AlertType.WARNING);
+    alert.initOwner(app.getPrimaryStage());
+    alert.setTitle("No Selection");
+    alert.setHeaderText("No Person Selected");
+    alert.setContentText("Please select a person in the table.");
+    alert.showAndWait();
   }
 
 }

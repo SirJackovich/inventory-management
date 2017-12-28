@@ -75,4 +75,19 @@ public class Inventory {
     }
     return tempParts;
   }
+  
+  public ObservableList<Product> searchProducts(String text) {
+    ObservableList<Product> tempProducts = FXCollections.observableArrayList();
+    try{
+      int productNumber = Integer.parseInt(text);
+      products.stream().filter((product) -> (product.getID() == productNumber)).forEachOrdered((product) -> {
+        tempProducts.add(product);
+      });
+    } catch(NumberFormatException e) {
+      products.stream().filter((product) -> (product.getName().contains(text))).forEachOrdered((product) -> {
+        tempProducts.add(product);
+      });
+    }
+    return tempProducts;
+  }
 }

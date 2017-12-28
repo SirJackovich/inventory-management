@@ -89,7 +89,7 @@
                            <children>
                               <Button fx:id="addProductButton" layoutX="14.0" layoutY="9.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleAddProduct" text="Add" />
                               <Button fx:id="modifyProductButton" layoutX="153.0" layoutY="8.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleModifyProduct" text="Modify" />
-                              <Button fx:id="deleteProductButton" layoutX="283.0" layoutY="8.0" minWidth="100.0" mnemonicParsing="false" text="Delete" />
+                              <Button fx:id="deleteProductButton" layoutX="283.0" layoutY="8.0" minWidth="100.0" mnemonicParsing="false" onAction="#handleDeleteProduct" text="Delete" />
                            </children>
                         </AnchorPane>
                      </items>

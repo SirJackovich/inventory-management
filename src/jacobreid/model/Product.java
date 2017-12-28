@@ -49,14 +49,20 @@ public class Product {
    * @param inventory
    * @param min
    * @param max
+   * @param associatedParts
    */
-  public Product(String name, double price, int inventory, int min, int max) {
+  public Product(String name, double price, int inventory, int min, int max, ObservableList<Part> associatedParts) {
     this.productID = new SimpleIntegerProperty(generateID());
     this.name = new SimpleStringProperty(name);
     this.price = new SimpleDoubleProperty(price);
     this.inventory = new SimpleIntegerProperty(inventory);
     this.min = new SimpleIntegerProperty(min);
     this.max = new SimpleIntegerProperty(max);
+    if(associatedParts != null){
+      associatedParts.forEach((part) -> {
+        this.associatedParts.add(part);
+      });
+    }
   }
 
 //  We auto generate the ID so there is no need for a setter function   
@@ -127,12 +133,15 @@ public class Product {
   public void addAssociatedPart(Part part){
     associatedParts.add(part);
   }
-
-  public boolean removeAssociatedPart(int index){
-    // TODO: figure out what to do here
-    associatedParts.remove(index);
-    return true;
+  
+  public ObservableList<Part> getAssociatedParts(){
+    return this.associatedParts;
   }
+  
+//  we dont need this function
+//  public boolean removeAssociatedPart(int index){
+//
+//  }
 
   public Part lookupAssociatedPart(int index){
     // TODO: figure out what to do here

@@ -156,21 +156,42 @@ public class MainController {
   }
 
   @FXML
-  void handleModifyProduct(ActionEvent event) {
-
+  void handleModifyProduct(ActionEvent event) throws IOException {
+    Product product = productsTableView.getSelectionModel().getSelectedItem(); 
+    if (product != null) {
+      ProductController.showDialog(app, primaryStage, product);
+    } else {
+      noSelectionAlert();
+    }
   }
 
   @FXML
   void handleAddProduct(ActionEvent event) throws IOException {
-    Product product = ProductController.showDialog(primaryStage, null);
+    Product product = ProductController.showDialog(app, primaryStage, null);
     if(product != null){
       app.getInventory().getProducts().add(product);
+    }
+  }
+  
+  @FXML
+  void handleDeleteProduct(ActionEvent event) {
+    int index = productsTableView.getSelectionModel().getSelectedIndex();
+    if (index >= 0) {
+      // TODO see if it removes it from the inventory
+      productsTableView.getItems().remove(index);
+    } else {
+      noSelectionAlert();
     }
   }
 
   @FXML
   void handleSearchProducts(ActionEvent event) {
-
+    String search = productsTextField.getText();
+    if("".equals(search)){
+      productsTableView.setItems(app.getInventory().getProducts());
+    }else{
+      productsTableView.setItems(app.getInventory().searchProducts(search));
+    }
   }
   
   private void noSelectionAlert(){
