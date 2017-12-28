@@ -198,8 +198,8 @@ public class MainController {
     Alert alert = new Alert(AlertType.WARNING);
     alert.initOwner(app.getPrimaryStage());
     alert.setTitle("No Selection");
-    alert.setHeaderText("No Person Selected");
-    alert.setContentText("Please select a person in the table.");
+    alert.setHeaderText("No Part or Product Selected");
+    alert.setContentText("Please select a part or product in the table.");
     alert.showAndWait();
   }
 

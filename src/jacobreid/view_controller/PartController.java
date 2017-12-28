@@ -9,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -141,7 +143,7 @@ public class PartController {
 
   @FXML
   void handleSave(ActionEvent event){
-    // if (isInputValid()) {
+     if (isInputValid()) {
       if(this.part == null){
         if("Outsourced".equals(getPartType())){
           this.part = new Outsourced(nameTextField.getText(), Double.parseDouble(priceTextField.getText()), Integer.parseInt(inventoryTextField.getText()), Integer.parseInt(minTextField.getText()), Integer.parseInt(maxTextField.getText()), partTextField.getText());
@@ -161,7 +163,7 @@ public class PartController {
         }
       }
       partStage.close();
-    // }
+     }
   }
     
   /**
@@ -169,58 +171,104 @@ public class PartController {
    * 
    * @return true if the input is valid
    */
-//  private boolean isInputValid() {
-//    String errorMessage = "";
-//
-//    if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {
-//      errorMessage += "No valid first name!\n"; 
-//    }
-//    if (lastNameField.getText() == null || lastNameField.getText().length() == 0) {
-//      errorMessage += "No valid last name!\n"; 
-//    }
-//    if (streetField.getText() == null || streetField.getText().length() == 0) {
-//      errorMessage += "No valid street!\n"; 
-//    }
-//
-//    if (postalCodeField.getText() == null || postalCodeField.getText().length() == 0) {
-//      errorMessage += "No valid postal code!\n"; 
-//    } else {
-//      // try to parse the postal code into an int.
-//      try {
-//        Integer.parseInt(postalCodeField.getText());
-//      } catch (NumberFormatException e) {
-//        errorMessage += "No valid postal code (must be an integer)!\n"; 
-//      }
-//    }
-//
-//    if (cityField.getText() == null || cityField.getText().length() == 0) {
-//      errorMessage += "No valid city!\n"; 
-//    }
-//
-//    if (birthdayField.getText() == null || birthdayField.getText().length() == 0) {
-//      errorMessage += "No valid birthday!\n";
-//    } else {
-//      if (!DateUtil.validDate(birthdayField.getText())) {
-//        errorMessage += "No valid birthday. Use the format dd.mm.yyyy!\n";
-//      }
-//    }
-//
-//    if (errorMessage.length() == 0) {
-//      return true;
-//    } else {
-//      // Show the error message.
-//      Alert alert = new Alert(AlertType.ERROR);
-//      alert.initOwner(dialogStage);
-//      alert.setTitle("Invalid Fields");
-//      alert.setHeaderText("Please correct invalid fields");
-//      alert.setContentText(errorMessage);
-//
-//      alert.showAndWait();
-//
-//      return false;
-//    }
-//    return true;
-//  }
+  private boolean isInputValid() {
+    String errorMessage = "";
+
+    if (nameTextField.getText() == null || nameTextField.getText().length() == 0) {
+      errorMessage += "No valid name!\n"; 
+    }
+    
+    if (priceTextField.getText() == null || priceTextField.getText().length() == 0) {
+      errorMessage += "No valid price!\n"; 
+    } else {
+      try {
+        Double.parseDouble(priceTextField.getText());
+      } catch (NumberFormatException e) {
+        errorMessage += "No valid price (must be an double)!\n"; 
+      }
+    }
+    
+    if (inventoryTextField.getText() == null || inventoryTextField.getText().length() == 0) {
+      errorMessage += "No valid inventory!\n"; 
+    } else {
+      try {
+        Integer.parseInt(inventoryTextField.getText());
+      } catch (NumberFormatException e) {
+        errorMessage += "No valid inventory (must be an integer)!\n"; 
+      }
+    }
+    
+    if (minTextField.getText() == null || minTextField.getText().length() == 0) {
+      errorMessage += "No valid min!\n"; 
+    } else {
+      try {
+        Integer.parseInt(minTextField.getText());
+      } catch (NumberFormatException e) {
+        errorMessage += "No valid min (must be an integer)!\n"; 
+      }
+    }
+    
+    if (maxTextField.getText() == null || maxTextField.getText().length() == 0) {
+      errorMessage += "No valid max!\n"; 
+    } else {
+      try {
+        Integer.parseInt(maxTextField.getText());
+      } catch (NumberFormatException e) {
+        errorMessage += "No valid max (must be an integer)!\n"; 
+      }
+    }
+    
+    if("Outsourced".equals(getPartType())){
+      if (partTextField.getText() == null || partTextField.getText().length() == 0) {
+        errorMessage += "No valid company name!\n"; 
+      }
+    }else {
+      if (partTextField.getText() == null || partTextField.getText().length() == 0) {
+        errorMessage += "No valid machine id!\n"; 
+      } else {
+        try {
+          Integer.parseInt(partTextField.getText());
+        } catch (NumberFormatException e) {
+          errorMessage += "No valid machine id (must be an integer)!\n"; 
+        }
+      }
+    }
+    
+    if(errorMessage.length() == 0){
+      errorMessage += checkNumbers();
+    }
+    
+    if (errorMessage.length() == 0) {
+      return true;
+    } else {
+      Alert alert = new Alert(AlertType.ERROR);
+      alert.initOwner(partStage);
+      alert.setTitle("Invalid Fields");
+      alert.setHeaderText("Please correct invalid fields");
+      alert.setContentText(errorMessage);
+
+      alert.showAndWait();
+
+      return false;
+    }
+  }
+  
+  private String checkNumbers() {
+    String errorMessage = "";
+    int inventory = Integer.parseInt(inventoryTextField.getText());
+    int max = Integer.parseInt(maxTextField.getText());
+    int min = Integer.parseInt(minTextField.getText());
+    if(max <= min){
+      errorMessage += "No valid max (must be greater than min)!\n"; 
+    }
+    if(min >= max){
+      errorMessage += "No valid min (must be less than max)!\n";
+    }
+    if(inventory <= min || inventory >= max){
+      errorMessage += "No valid inventory (must be between min and max)!\n"; 
+    }
+    return errorMessage;
+  }
   
   public static Part showDialog(Stage primaryStage, Part part, String title, boolean disableRadio) throws IOException{
     

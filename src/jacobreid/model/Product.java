@@ -138,15 +138,20 @@ public class Product {
     return this.associatedParts;
   }
   
-//  we dont need this function
+//  we dont need these functions
 //  public boolean removeAssociatedPart(int index){
-//
+//    return associatedParts.remove(lookupAssociatedPart(index));
 //  }
-
-  public Part lookupAssociatedPart(int index){
-    // TODO: figure out what to do here
-    return associatedParts.get(index);
-  }
+//  
+//  public void removeAssociatedParts(){
+//    for(int i = 0; i < associatedParts.size(); i++){
+//      removeAssociatedPart(i);
+//    }
+//  }
+//
+//  public Part lookupAssociatedPart(int index){
+//    return associatedParts.get(index);
+//  }
 
   private int generateID(){
     return ID++;

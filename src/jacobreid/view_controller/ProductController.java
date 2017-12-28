@@ -125,8 +125,7 @@ public class ProductController {
   void handleAdd(ActionEvent event) {
     int index = allPartsTableView.getSelectionModel().getSelectedIndex();
     if (index >= 0) {
-      // TODO see if it adds it to the inventory
-      productPartsTableView.getItems().add(allPartsTableView.getSelectionModel().getSelectedItem());
+      productPartsTableView.getItems().add(allPartsTableView.getSelectionModel().getSelectedItem());  
     } else {
       noSelectionAlert();
     }
@@ -141,7 +140,6 @@ public class ProductController {
   void handleDelete(ActionEvent event) {
     int index = productPartsTableView.getSelectionModel().getSelectedIndex();
     if (index >= 0) {
-      // TODO see if it removes it from the inventory
       productPartsTableView.getItems().remove(index);
     } else {
       noSelectionAlert();
@@ -150,7 +148,7 @@ public class ProductController {
 
   @FXML
   void handleSave(ActionEvent event) {
-    // if (isInputValid()) {
+     if (isInputValid()) {
       if(this.product == null){
         this.product = new Product(nameTextField.getText(), Double.parseDouble(priceTextField.getText()), Integer.parseInt(inventoryTextField.getText()), Integer.parseInt(minTextField.getText()), Integer.parseInt(maxTextField.getText()), productPartsTableView.getItems());
       }else {
@@ -159,12 +157,9 @@ public class ProductController {
         this.product.setInventory(Integer.parseInt(inventoryTextField.getText()));
         this.product.setMin(Integer.parseInt(minTextField.getText()));
         this.product.setMax(Integer.parseInt(maxTextField.getText()));
-        productPartsTableView.getItems().forEach((part) -> {
-          this.product.addAssociatedPart(part);
-        });
       }
       productStage.close();
-    // }
+     }
   }
 
   @FXML
@@ -229,12 +224,100 @@ public class ProductController {
     
   }
   
+  /**
+   * Validates the user input in the text fields.
+   * 
+   * @return true if the input is valid
+   */
+  private boolean isInputValid() {
+    String errorMessage = "";
+
+    if (nameTextField.getText() == null || nameTextField.getText().length() == 0) {
+      errorMessage += "No valid name!\n"; 
+    }
+    
+    if (priceTextField.getText() == null || priceTextField.getText().length() == 0) {
+      errorMessage += "No valid price!\n"; 
+    } else {
+      try {
+        Double.parseDouble(priceTextField.getText());
+      } catch (NumberFormatException e) {
+        errorMessage += "No valid price (must be an double)!\n"; 
+      }
+    }
+    
+    if (inventoryTextField.getText() == null || inventoryTextField.getText().length() == 0) {
+      errorMessage += "No valid inventory!\n"; 
+    } else {
+      try {
+        Integer.parseInt(inventoryTextField.getText());
+      } catch (NumberFormatException e) {
+        errorMessage += "No valid inventory (must be an integer)!\n"; 
+      }
+    }
+    
+    if (minTextField.getText() == null || minTextField.getText().length() == 0) {
+      errorMessage += "No valid min!\n"; 
+    } else {
+      try {
+        Integer.parseInt(minTextField.getText());
+      } catch (NumberFormatException e) {
+        errorMessage += "No valid min (must be an integer)!\n"; 
+      }
+    }
+    
+    if (maxTextField.getText() == null || maxTextField.getText().length() == 0) {
+      errorMessage += "No valid max!\n"; 
+    } else {
+      try {
+        Integer.parseInt(maxTextField.getText());
+      } catch (NumberFormatException e) {
+        errorMessage += "No valid max (must be an integer)!\n"; 
+      }
+    }
+    
+    if(errorMessage.length() == 0){
+      errorMessage += checkNumbers();
+    }
+    
+    if (errorMessage.length() == 0) {
+      return true;
+    } else {
+      Alert alert = new Alert(Alert.AlertType.ERROR);
+      alert.initOwner(productStage);
+      alert.setTitle("Invalid Fields");
+      alert.setHeaderText("Please correct invalid fields");
+      alert.setContentText(errorMessage);
+
+      alert.showAndWait();
+
+      return false;
+    }
+  }
+  
+  private String checkNumbers() {
+    String errorMessage = "";
+    int inventory = Integer.parseInt(inventoryTextField.getText());
+    int max = Integer.parseInt(maxTextField.getText());
+    int min = Integer.parseInt(minTextField.getText());
+    if(max <= min){
+      errorMessage += "No valid max (must be greater than min)!\n"; 
+    }
+    if(min >= max){
+      errorMessage += "No valid min (must be less than max)!\n";
+    }
+    if(inventory <= min || inventory >= max){
+      errorMessage += "No valid inventory (must be between min and max)!\n"; 
+    }
+    return errorMessage;
+  }
+  
   private void noSelectionAlert(){
     Alert alert = new Alert(Alert.AlertType.WARNING);
     alert.initOwner(app.getPrimaryStage());
     alert.setTitle("No Selection");
-    alert.setHeaderText("No Person Selected");
-    alert.setContentText("Please select a person in the table.");
+    alert.setHeaderText("No Part Selected");
+    alert.setContentText("Please select a part in the table.");
     alert.showAndWait();
   }
 
