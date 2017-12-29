@@ -31,9 +31,9 @@ public class JacobReid extends Application {
    */
   public JacobReid() {
     inventory.addPart(new Outsourced("outsourced part", 15, 3, 1, 5, "companyName"));
+    inventory.addProduct(new Product("product one", 15, 3, 1, 5, inventory.getParts()));
     inventory.addPart(new Inhouse("inhouse part", 10, 2, 1, 5, 7));
-    inventory.addProduct(new Product("product one", 15, 3, 1, 5, null));
-    inventory.addProduct(new Product("product two", 10, 2, 1, 5, inventory.getParts()));
+    inventory.addProduct(new Product("product two", 25, 2, 1, 5, inventory.getParts()));
   }
 
   public Inventory getInventory(){

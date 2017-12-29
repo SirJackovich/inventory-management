@@ -1,13 +1,12 @@
 package jacobreid.view_controller;
 
 import jacobreid.JacobReid;
+import jacobreid.model.AlertDialog;
 import jacobreid.model.Part;
 import jacobreid.model.Product;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -123,10 +122,11 @@ public class MainController {
   void handleDeletePart(ActionEvent event) {
     int index = partsTableView.getSelectionModel().getSelectedIndex();
     if (index >= 0) {
-      // TODO see if it removes it from the inventory
-      partsTableView.getItems().remove(index);
+      if(AlertDialog.deleteDialog()){
+        partsTableView.getItems().remove(index);
+      }
     } else {
-      noSelectionAlert();
+      AlertDialog.noSelectionDialog("part");
     }
   }
 
@@ -141,7 +141,7 @@ public class MainController {
     if (part != null) {
       PartController.showDialog(primaryStage, part, "Modify part", true);
     } else {
-      noSelectionAlert();
+      AlertDialog.noSelectionDialog("part");
     }
   }
   
@@ -161,7 +161,7 @@ public class MainController {
     if (product != null) {
       ProductController.showDialog(app, primaryStage, product);
     } else {
-      noSelectionAlert();
+      AlertDialog.noSelectionDialog("product");
     }
   }
 
@@ -177,10 +177,11 @@ public class MainController {
   void handleDeleteProduct(ActionEvent event) {
     int index = productsTableView.getSelectionModel().getSelectedIndex();
     if (index >= 0) {
-      // TODO see if it removes it from the inventory
-      productsTableView.getItems().remove(index);
+      if(AlertDialog.deleteDialog()){
+        productsTableView.getItems().remove(index);
+      }
     } else {
-      noSelectionAlert();
+      AlertDialog.noSelectionDialog("product");
     }
   }
 
@@ -192,15 +193,6 @@ public class MainController {
     }else{
       productsTableView.setItems(app.getInventory().searchProducts(search));
     }
-  }
-  
-  private void noSelectionAlert(){
-    Alert alert = new Alert(AlertType.WARNING);
-    alert.initOwner(app.getPrimaryStage());
-    alert.setTitle("No Selection");
-    alert.setHeaderText("No Part or Product Selected");
-    alert.setContentText("Please select a part or product in the table.");
-    alert.showAndWait();
   }
 
 }

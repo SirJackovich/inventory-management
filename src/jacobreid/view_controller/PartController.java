@@ -1,6 +1,7 @@
 package jacobreid.view_controller;
 
 import jacobreid.JacobReid;
+import jacobreid.model.AlertDialog;
 import jacobreid.model.Inhouse;
 import jacobreid.model.Outsourced;
 import jacobreid.model.Part;
@@ -9,8 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -118,7 +117,9 @@ public class PartController {
 
   @FXML
   void handleCancel(ActionEvent event) {
-    partStage.close();
+    if(AlertDialog.cancelDialog()){
+      partStage.close();
+    }
   }
 
   @FXML
@@ -241,14 +242,7 @@ public class PartController {
     if (errorMessage.length() == 0) {
       return true;
     } else {
-      Alert alert = new Alert(AlertType.ERROR);
-      alert.initOwner(partStage);
-      alert.setTitle("Invalid Fields");
-      alert.setHeaderText("Please correct invalid fields");
-      alert.setContentText(errorMessage);
-
-      alert.showAndWait();
-
+      AlertDialog.errorDialog(errorMessage);
       return false;
     }
   }
@@ -264,7 +258,7 @@ public class PartController {
     if(min >= max){
       errorMessage += "No valid min (must be less than max)!\n";
     }
-    if(inventory <= min || inventory >= max){
+    if(inventory < min || inventory > max){
       errorMessage += "No valid inventory (must be between min and max)!\n"; 
     }
     return errorMessage;

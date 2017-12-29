@@ -1,16 +1,15 @@
 package jacobreid.view_controller;
 
 import jacobreid.JacobReid;
-import jacobreid.model.Inhouse;
-import jacobreid.model.Outsourced;
+import jacobreid.model.AlertDialog;
 import jacobreid.model.Part;
 import jacobreid.model.Product;
 import java.io.IOException;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -127,22 +126,26 @@ public class ProductController {
     if (index >= 0) {
       productPartsTableView.getItems().add(allPartsTableView.getSelectionModel().getSelectedItem());  
     } else {
-      noSelectionAlert();
+      AlertDialog.noSelectionDialog("part");
     }
   }
 
   @FXML
   void handleCancel(ActionEvent event) {
-    productStage.close();
+    if(AlertDialog.cancelDialog()){
+      productStage.close();
+    }
   }
 
   @FXML
   void handleDelete(ActionEvent event) {
     int index = productPartsTableView.getSelectionModel().getSelectedIndex();
     if (index >= 0) {
-      productPartsTableView.getItems().remove(index);
+      if(AlertDialog.deleteDialog()){
+        productPartsTableView.getItems().remove(index);
+      }
     } else {
-      noSelectionAlert();
+      AlertDialog.noSelectionDialog("part");
     }
   }
 
@@ -283,14 +286,7 @@ public class ProductController {
     if (errorMessage.length() == 0) {
       return true;
     } else {
-      Alert alert = new Alert(Alert.AlertType.ERROR);
-      alert.initOwner(productStage);
-      alert.setTitle("Invalid Fields");
-      alert.setHeaderText("Please correct invalid fields");
-      alert.setContentText(errorMessage);
-
-      alert.showAndWait();
-
+      AlertDialog.errorDialog(errorMessage);
       return false;
     }
   }
@@ -300,25 +296,29 @@ public class ProductController {
     int inventory = Integer.parseInt(inventoryTextField.getText());
     int max = Integer.parseInt(maxTextField.getText());
     int min = Integer.parseInt(minTextField.getText());
+    ObservableList<Part> parts = productPartsTableView.getItems();
+    double price = Double.parseDouble(priceTextField.getText());
     if(max <= min){
       errorMessage += "No valid max (must be greater than min)!\n"; 
     }
     if(min >= max){
       errorMessage += "No valid min (must be less than max)!\n";
     }
-    if(inventory <= min || inventory >= max){
+    if(inventory < min || inventory > max){
       errorMessage += "No valid inventory (must be between min and max)!\n"; 
     }
+    if(parts.isEmpty()){
+      errorMessage += "No valid part (each product must have at least one part)!\n"; 
+    }else {
+      double partsPrice = 0;
+      for(Part part: parts){
+        partsPrice += part.getPrice();
+      }
+      if(price < partsPrice){
+        errorMessage += "No valid price (the price of the product cannot be less then the parts)!\n"; 
+      }
+    }
     return errorMessage;
-  }
-  
-  private void noSelectionAlert(){
-    Alert alert = new Alert(Alert.AlertType.WARNING);
-    alert.initOwner(app.getPrimaryStage());
-    alert.setTitle("No Selection");
-    alert.setHeaderText("No Part Selected");
-    alert.setContentText("Please select a part in the table.");
-    alert.showAndWait();
   }
 
 }
