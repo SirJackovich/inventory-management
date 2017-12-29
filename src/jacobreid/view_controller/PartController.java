@@ -6,7 +6,6 @@ import jacobreid.model.Inhouse;
 import jacobreid.model.Outsourced;
 import jacobreid.model.Part;
 import java.io.IOException;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,111 +18,64 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PartController {
+  
+  private Stage partStage;
+  private Part part;
     
   @FXML
   private Label partLabel;
-
   @FXML
   private Label partTextLabel;
-
-  @FXML
-  private ToggleGroup group;
-
-  @FXML
-  private RadioButton inHouseRadioButton;
-
-  @FXML
-  private RadioButton OutsourcedRadioButton;
-
-  @FXML
-  private TextField nameTextField;
-
+  
   @FXML
   private TextField inventoryTextField;
-
+  @FXML
+  private TextField IDTextField;
+  @FXML
+  private TextField maxTextField;
+  @FXML
+  private TextField minTextField;
+  @FXML
+  private TextField nameTextField;
+  @FXML
+  private TextField partTextField;
   @FXML
   private TextField priceTextField;
 
   @FXML
-  private TextField partTextField;
-
+  private RadioButton inHouseRadioButton;
   @FXML
-  private TextField maxTextField;
-
-  @FXML
-  private TextField minTextField;
-
-  @FXML
-  private TextField IDTextField;
-    
-  private Stage partStage;
-  private Part part;
-  
+  private RadioButton OutsourcedRadioButton;
   
   @FXML
-  public void initialize() {
-    inHouseRadioButton.setSelected(true);
-    inHouseRadioButton.setToggleGroup(group);
-    OutsourcedRadioButton.setToggleGroup(group);
-    partTextLabel.setText("Machine ID");
-    IDTextField.setDisable(true);
-  }
-
-  public void setPartStage(Stage partStage) {
-    this.partStage = partStage;
-  }
+  private ToggleGroup group;
   
-  public Part getPart(){
-    return part;
-  }
-  
-  public void setPart(Part part) {
-    nameTextField.setText(part.getName());
-    inventoryTextField.setText(Integer.toString(part.getInventory()));
-    priceTextField.setText(Double.toString(part.getPrice()));
-    maxTextField.setText(Integer.toString(part.getMax()));
-    minTextField.setText(Integer.toString(part.getMin()));
-    IDTextField.setText(Integer.toString(part.getID()));
-
-    if("Outsourced".equals(part.getPartType())){
-      partTextField.setText(((Outsourced)part).getCompanyName());
-      inHouseRadioButton.setSelected(false);
-      OutsourcedRadioButton.setSelected(true);
-      partTextLabel.setText("Company Name");
-    }else{
-      partTextField.setText(Integer.toString(((Inhouse)part).getMachineID()));
-      inHouseRadioButton.setSelected(true);
-      OutsourcedRadioButton.setSelected(false);
-      partTextLabel.setText("Machine ID");
+  private String checkNumbers() {
+    String errorMessage = "";
+    int inventory = Integer.parseInt(inventoryTextField.getText());
+    int max = Integer.parseInt(maxTextField.getText());
+    int min = Integer.parseInt(minTextField.getText());
+    if(max <= min){
+      errorMessage += "No valid max (must be greater than min)!\n"; 
     }
-    this.part = part;
-  }
-    
-  public String getPartType() {
-    RadioButton selected = (RadioButton)group.getSelectedToggle();
-    return selected.getText();
-  }
-    
-  @FXML
-  public void setPartLabel(String str){
-    partLabel.setText(str);
+    if(min >= max){
+      errorMessage += "No valid min (must be less than max)!\n";
+    }
+    if(inventory < min || inventory > max){
+      errorMessage += "No valid inventory (must be between min and max)!\n"; 
+    }
+    return errorMessage;
   }
   
   @FXML
-  public void disableRadio(){
-    inHouseRadioButton.setDisable(true);
-    OutsourcedRadioButton.setDisable(true);
-  }
-
-  @FXML
-  void handleCancel(ActionEvent event) {
+  private void handleCancel() {
     if(AlertDialog.cancelDialog()){
       partStage.close();
     }
   }
 
   @FXML
-  void handleInHouse(ActionEvent event) {
+  private void handleInHouse() {
     partTextLabel.setText("Machine ID");
     if(this.part != null){
       partTextField.setText(Integer.toString(((Inhouse)part).getMachineID()));
@@ -133,7 +85,7 @@ public class PartController {
   }
 
   @FXML
-  void handleOutsourced(ActionEvent event) {
+  private void handleOutsourced() {
     partTextLabel.setText("Company Name");
     if(this.part != null){
       partTextField.setText(((Outsourced)this.part).getCompanyName());
@@ -143,7 +95,7 @@ public class PartController {
   }
 
   @FXML
-  void handleSave(ActionEvent event){
+  private void handleSave(){
      if (isInputValid()) {
       if(this.part == null){
         if("Outsourced".equals(getPartType())){
@@ -167,11 +119,6 @@ public class PartController {
      }
   }
     
-  /**
-   * Validates the user input in the text fields.
-   * 
-   * @return true if the input is valid
-   */
   private boolean isInputValid() {
     String errorMessage = "";
 
@@ -247,21 +194,59 @@ public class PartController {
     }
   }
   
-  private String checkNumbers() {
-    String errorMessage = "";
-    int inventory = Integer.parseInt(inventoryTextField.getText());
-    int max = Integer.parseInt(maxTextField.getText());
-    int min = Integer.parseInt(minTextField.getText());
-    if(max <= min){
-      errorMessage += "No valid max (must be greater than min)!\n"; 
+  @FXML
+  public void disableRadio(){
+    inHouseRadioButton.setDisable(true);
+    OutsourcedRadioButton.setDisable(true);
+  }
+  
+  public Part getPart(){
+    return part;
+  }
+  
+  public String getPartType() {
+    RadioButton selected = (RadioButton)group.getSelectedToggle();
+    return selected.getText();
+  }
+  
+  @FXML
+  public void initialize() {
+    inHouseRadioButton.setSelected(true);
+    inHouseRadioButton.setToggleGroup(group);
+    OutsourcedRadioButton.setToggleGroup(group);
+    partTextLabel.setText("Machine ID");
+    IDTextField.setDisable(true);
+  }
+  
+  public void setPart(Part part) {
+    nameTextField.setText(part.getName());
+    inventoryTextField.setText(Integer.toString(part.getInventory()));
+    priceTextField.setText(Double.toString(part.getPrice()));
+    maxTextField.setText(Integer.toString(part.getMax()));
+    minTextField.setText(Integer.toString(part.getMin()));
+    IDTextField.setText(Integer.toString(part.getID()));
+
+    if("Outsourced".equals(part.getPartType())){
+      partTextField.setText(((Outsourced)part).getCompanyName());
+      inHouseRadioButton.setSelected(false);
+      OutsourcedRadioButton.setSelected(true);
+      partTextLabel.setText("Company Name");
+    }else{
+      partTextField.setText(Integer.toString(((Inhouse)part).getMachineID()));
+      inHouseRadioButton.setSelected(true);
+      OutsourcedRadioButton.setSelected(false);
+      partTextLabel.setText("Machine ID");
     }
-    if(min >= max){
-      errorMessage += "No valid min (must be less than max)!\n";
-    }
-    if(inventory < min || inventory > max){
-      errorMessage += "No valid inventory (must be between min and max)!\n"; 
-    }
-    return errorMessage;
+    this.part = part;
+  }
+  
+  @FXML
+  public void setPartLabel(String str){
+    partLabel.setText(str);
+  }
+
+  public void setPartStage(Stage partStage) {
+    this.partStage = partStage;
   }
   
   public static Part showDialog(Stage primaryStage, Part part, String title, boolean disableRadio) throws IOException{

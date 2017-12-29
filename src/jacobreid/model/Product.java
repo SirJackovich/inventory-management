@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jacobreid.model;
 
 import javafx.beans.property.IntegerProperty;
@@ -14,21 +9,17 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-/**
- * Model class for a Product
- * 
- * @author sirjackovich
- */
 public class Product {
-  private static int ID = 0;
+  
   private final ObservableList<Part> associatedParts = FXCollections.observableArrayList();
-  private final IntegerProperty productID;
+  private final IntegerProperty inventory;
+  private static int ID = 0;
+  private final IntegerProperty max;
+  private final IntegerProperty min;
   private final StringProperty name;
   private final DoubleProperty price;
-  private final IntegerProperty inventory;
-  private final IntegerProperty min;
-  private final IntegerProperty max;
-    
+  private final IntegerProperty productID;
+ 
   /**
    * Default constructor.
    */
@@ -138,7 +129,7 @@ public class Product {
     return this.associatedParts;
   }
   
-//  we dont need these functions
+//  we dont need these functions, this functionality is taken care of elsewhere
 //  public boolean removeAssociatedPart(int index){
 //    return associatedParts.remove(lookupAssociatedPart(index));
 //  }

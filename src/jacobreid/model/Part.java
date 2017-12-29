@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jacobreid.model;
 
 import javafx.beans.property.DoubleProperty;
@@ -12,10 +7,6 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-/**
- *
- * @author sirjackovich
- */
 public abstract class Part {
   private static int ID = 0;
   private final IntegerProperty partID;
@@ -100,10 +91,6 @@ public abstract class Part {
     return this.min.get();
   }
 
-//  public IntegerProperty minProperty() {
-//    return min;
-//  }
-
   public void setMax(int max){
     this.max.set(max);
   }
@@ -111,10 +98,6 @@ public abstract class Part {
   public int getMax(){
     return this.max.get();
   }
-    
-//  public IntegerProperty maxProperty() {
-//    return max;
-//  }
 
   public String getPartType(){
     return "";

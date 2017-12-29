@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package jacobreid.model;
 
 import java.util.Optional;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-/**
- *
- * @author sirjackovich
- */
 public class AlertDialog {
   public static void noSelectionDialog(String text){
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -27,7 +18,7 @@ public class AlertDialog {
     alert.setTitle("Confirm Delete");
     alert.setHeaderText("Confirm Delete");
     alert.setContentText("You are about to delete something, there is no going back.");
-
+    
     Optional<ButtonType> result = alert.showAndWait();
     return (result.get() == ButtonType.OK);
   }
@@ -47,7 +38,6 @@ public class AlertDialog {
     alert.setTitle("Invalid Fields");
     alert.setHeaderText("Please correct invalid fields");
     alert.setContentText(errorMessage);
-
     alert.showAndWait();
   }
 }
