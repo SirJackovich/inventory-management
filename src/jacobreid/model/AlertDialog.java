@@ -17,7 +17,7 @@ public class AlertDialog {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     alert.setTitle("Confirm Delete");
     alert.setHeaderText("Confirm Delete");
-    alert.setContentText("You are about to delete something, there is no going back.");
+    alert.setContentText("You are about to delete something, once deleted it cannot be recovered.");
     
     Optional<ButtonType> result = alert.showAndWait();
     return (result.get() == ButtonType.OK);
@@ -36,7 +36,7 @@ public class AlertDialog {
   public static void errorDialog(String errorMessage){
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle("Invalid Fields");
-    alert.setHeaderText("Please correct invalid fields");
+    alert.setHeaderText("Please correct the invalid fields");
     alert.setContentText(errorMessage);
     alert.showAndWait();
   }
