@@ -11,38 +11,39 @@ public class Inventory {
     products.add(product);
   }
 
-  public boolean removeProduct(int index){
-    // TODO: figure out what to do here
-    return true;
-  }
+//  we dont use this function, this functionality is handled elsewhere
+//  public boolean removeProduct(int index){
+//    
+//  }
 
-  public Product lookupProduct(int index){
-    // TODO: figure out what to do here
-    return products.get(index);
-  }
+//  we dont use this function, this functionality is handled elsewhere
+//  public Product lookupProduct(int index){
+//    
+//  }
 
-  public void updateProduct(int index){
-    // TODO: figure out what to do here
-  }
+//  we dont use this function, this functionality is handled elsewhere
+//  public void updateProduct(int index){
+//    
+//  }
 
   public void addPart(Part part){
     parts.add(part);
   }
 
-  public boolean deletePart(Part p){
-    // TODO: figure out what to do here
-    parts.remove(p);
-    return true;
-  }
+//  we dont use this function, this functionality is handled elsewhere
+//  public boolean deletePart(Part p){
+//
+//  }
 
-  public Part lookupPart(int index){
-    // TODO: figure out what to do here
-    return parts.get(index);
-  }
+//  we dont use this function, this functionality is handled elsewhere
+//  public Part lookupPart(int index){
+//    
+//  }
 
-  public void updatePart(int index){
-    // TODO: figure out what to do here
-  }
+//  we dont use this function, this functionality is handled elsewhere
+//  public void updatePart(int index){
+//    
+//  }
 
   public ObservableList<Part> getParts(){
     return parts;

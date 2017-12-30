@@ -40,4 +40,12 @@ public class AlertDialog {
     alert.setContentText(errorMessage);
     alert.showAndWait();
   }
+  
+  public static void cantDeleteDialog(){
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("Error Deleteing");
+    alert.setHeaderText("Could not complete delete action");
+    alert.setContentText("Products with at least one part cannot be deleted");
+    alert.showAndWait();
+  }
 }

@@ -54,7 +54,7 @@ public class MainController {
   
   @FXML
   private void handleAddProduct() throws IOException {
-    Product product = ProductController.showDialog(app, primaryStage, null);
+    Product product = ProductController.showDialog(app, primaryStage, "Add Product", null);
     if(product != null){
       app.getInventory().getProducts().add(product);
     }
@@ -76,8 +76,13 @@ public class MainController {
   private void handleDeleteProduct() {
     int index = productsTableView.getSelectionModel().getSelectedIndex();
     if (index >= 0) {
-      if(AlertDialog.deleteDialog()){
-        productsTableView.getItems().remove(index);
+      Product product = productsTableView.getItems().get(index);
+      if(product.getAssociatedParts().isEmpty()){
+        if(AlertDialog.deleteDialog()){
+          productsTableView.getItems().remove(index);
+        }
+      }else{
+        AlertDialog.cantDeleteDialog();
       }
     } else {
       AlertDialog.noSelectionDialog("product");
@@ -93,7 +98,7 @@ public class MainController {
   private void handleModifyPart() throws IOException {
     Part part = partsTableView.getSelectionModel().getSelectedItem(); 
     if (part != null) {
-      PartController.showDialog(primaryStage, part, "Modify part", true);
+      PartController.showDialog(primaryStage, part, "Modify Part", true);
     } else {
       AlertDialog.noSelectionDialog("part");
     }
@@ -103,7 +108,7 @@ public class MainController {
   private void handleModifyProduct() throws IOException {
     Product product = productsTableView.getSelectionModel().getSelectedItem(); 
     if (product != null) {
-      ProductController.showDialog(app, primaryStage, product);
+      ProductController.showDialog(app, primaryStage, "Modify Product", product);
     } else {
       AlertDialog.noSelectionDialog("product");
     }

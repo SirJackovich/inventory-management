@@ -6,10 +6,10 @@ import jacobreid.model.Part;
 import jacobreid.model.Product;
 import java.io.IOException;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -22,6 +22,9 @@ public class ProductController {
   private JacobReid app;
   private Product product;
   private Stage productStage;
+  
+  @FXML
+  private Label productLabel;
   
   @FXML
   private TextField inventoryTextField;
@@ -62,7 +65,12 @@ public class ProductController {
   
   private String checkNumbers() {
     String errorMessage = "";
-    int inventory = Integer.parseInt(inventoryTextField.getText());
+    int inventory;
+    try {
+      inventory = Integer.parseInt(inventoryTextField.getText());
+    } catch (NumberFormatException e) {
+      inventory = 0; 
+    }
     int max = Integer.parseInt(maxTextField.getText());
     int min = Integer.parseInt(minTextField.getText());
     ObservableList<Part> parts = productPartsTableView.getItems();
@@ -120,12 +128,25 @@ public class ProductController {
   @FXML
   private void handleSave() {
      if (isInputValid()) {
+      int inventory;
+      try {
+        inventory = Integer.parseInt(inventoryTextField.getText());
+      } catch (NumberFormatException e) {
+        inventory = 0; 
+      }
       if(this.product == null){
-        this.product = new Product(nameTextField.getText(), Double.parseDouble(priceTextField.getText()), Integer.parseInt(inventoryTextField.getText()), Integer.parseInt(minTextField.getText()), Integer.parseInt(maxTextField.getText()), productPartsTableView.getItems());
+        this.product = new Product(
+          nameTextField.getText(), 
+          Double.parseDouble(priceTextField.getText()), 
+          inventory, 
+          Integer.parseInt(minTextField.getText()), 
+          Integer.parseInt(maxTextField.getText()), 
+          productPartsTableView.getItems()
+        );
       }else {
         this.product.setName(nameTextField.getText());
         this.product.setPrice(Double.parseDouble(priceTextField.getText()));
-        this.product.setInventory(Integer.parseInt(inventoryTextField.getText()));
+        this.product.setInventory(inventory);
         this.product.setMin(Integer.parseInt(minTextField.getText()));
         this.product.setMax(Integer.parseInt(maxTextField.getText()));
       }
@@ -174,16 +195,6 @@ public class ProductController {
         Double.parseDouble(priceTextField.getText());
       } catch (NumberFormatException e) {
         errorMessage += "No valid price (must be an double)!\n"; 
-      }
-    }
-    
-    if (inventoryTextField.getText() == null || inventoryTextField.getText().length() == 0) {
-      errorMessage += "No valid inventory!\n"; 
-    } else {
-      try {
-        Integer.parseInt(inventoryTextField.getText());
-      } catch (NumberFormatException e) {
-        errorMessage += "No valid inventory (must be an integer)!\n"; 
       }
     }
     
@@ -240,12 +251,17 @@ public class ProductController {
     productPartsTableView.setItems(product.getAssociatedParts());
     this.product = product;
   }
+  
+  @FXML
+  public void setProductLabel(String str){
+    productLabel.setText(str);
+  }
 
   public void setProductStage(Stage productStage) {
     this.productStage = productStage;
   }
 
-  public static Product showDialog(JacobReid app, Stage primaryStage, Product product) throws IOException{
+  public static Product showDialog(JacobReid app, Stage primaryStage, String title, Product product) throws IOException{
     
       // Load the fxml file and create a new stage for the popup dialog.
       FXMLLoader loader = new FXMLLoader();
@@ -254,7 +270,7 @@ public class ProductController {
 
       // Create the dialog Stage.
       Stage productStage = new Stage();
-      // productStage.setTitle(title);
+      productStage.setTitle(title);
       productStage.initModality(Modality.APPLICATION_MODAL);
       productStage.initOwner(primaryStage);
       Scene scene = new Scene(page);
@@ -263,7 +279,7 @@ public class ProductController {
       // set the part in the controller
       ProductController prodcutController = loader.getController();
       prodcutController.setApp(app);
-      // prodcutController.setProductLabel(title);
+      prodcutController.setProductLabel(title);
       
       prodcutController.setProductStage(productStage);
       if(product != null){
