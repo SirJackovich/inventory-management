@@ -1,4 +1,4 @@
-package jacobreid.model;
+package inventorymanagement.model;
 
 import java.util.Optional;
 import javafx.scene.control.Alert;

@@ -1,4 +1,4 @@
-package jacobreid.model;
+package inventorymanagement.model;
 
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;

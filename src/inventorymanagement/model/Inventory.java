@@ -1,4 +1,4 @@
-package jacobreid.model;
+package inventorymanagement.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

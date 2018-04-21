@@ -1,10 +1,10 @@
-package jacobreid.view_controller;
+package inventorymanagement.view_controller;
 
-import jacobreid.JacobReid;
-import jacobreid.model.AlertDialog;
-import jacobreid.model.Inhouse;
-import jacobreid.model.Outsourced;
-import jacobreid.model.Part;
+import inventorymanagement.inventorymanagement;
+import inventorymanagement.model.AlertDialog;
+import inventorymanagement.model.Inhouse;
+import inventorymanagement.model.Outsourced;
+import inventorymanagement.model.Part;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -253,7 +253,7 @@ public class PartController {
     
       // Load the fxml file and create a new stage for the popup dialog.
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(JacobReid.class.getResource("view_controller/Part.fxml"));
+      loader.setLocation(inventorymanagement.class.getResource("view_controller/Part.fxml"));
       AnchorPane page = (AnchorPane) loader.load();
 
       // Create the dialog Stage.

@@ -1,9 +1,9 @@
-package jacobreid.view_controller;
+package inventorymanagement.view_controller;
 
-import jacobreid.JacobReid;
-import jacobreid.model.AlertDialog;
-import jacobreid.model.Part;
-import jacobreid.model.Product;
+import inventorymanagement.inventorymanagement;
+import inventorymanagement.model.AlertDialog;
+import inventorymanagement.model.Part;
+import inventorymanagement.model.Product;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class MainController {
   
 
-  private JacobReid app;
+  private inventorymanagement app;
   private Stage primaryStage;
 
   @FXML
@@ -149,7 +149,7 @@ public class MainController {
     productPriceColumn.setCellValueFactory(cellData -> cellData.getValue().priceProperty().asObject());
   }
 
-  public void setApp(JacobReid app) {
+  public void setApp(inventorymanagement app) {
     this.app = app;
 
     // Add data to tables

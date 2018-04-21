@@ -1,9 +1,9 @@
-package jacobreid.view_controller;
+package inventorymanagement.view_controller;
 
-import jacobreid.JacobReid;
-import jacobreid.model.AlertDialog;
-import jacobreid.model.Part;
-import jacobreid.model.Product;
+import inventorymanagement.inventorymanagement;
+import inventorymanagement.model.AlertDialog;
+import inventorymanagement.model.Part;
+import inventorymanagement.model.Product;
 import java.io.IOException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 
 public class ProductController {
   
-  private JacobReid app;
+  private inventorymanagement app;
   private Product product;
   private Stage productStage;
   
@@ -234,7 +234,7 @@ public class ProductController {
     return product;
   }
   
-  public void setApp(JacobReid app) {
+  public void setApp(inventorymanagement app) {
     this.app = app;
 
     // Add data to table
@@ -261,11 +261,11 @@ public class ProductController {
     this.productStage = productStage;
   }
 
-  public static Product showDialog(JacobReid app, Stage primaryStage, String title, Product product) throws IOException{
+  public static Product showDialog(inventorymanagement app, Stage primaryStage, String title, Product product) throws IOException{
     
       // Load the fxml file and create a new stage for the popup dialog.
       FXMLLoader loader = new FXMLLoader();
-      loader.setLocation(JacobReid.class.getResource("view_controller/Product.fxml"));
+      loader.setLocation(inventorymanagement.class.getResource("view_controller/Product.fxml"));
       AnchorPane page = (AnchorPane) loader.load();
 
       // Create the dialog Stage.
